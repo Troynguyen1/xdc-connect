@@ -4,6 +4,7 @@ export const LOADERS = {
   Privatekey: "privatekey",
   MetaMask: "metamask",
   DcentInApp: "dcent-inapp",
+  WalletConnect: "wallet-connect",
 };
 
 export const VALID_CHAINS = [50, 51, 551];
