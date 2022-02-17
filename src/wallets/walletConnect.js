@@ -167,7 +167,7 @@ export async function SendTransaction(tx) {
         })
         .catch(error => {
             // Error returned when rejected
-            reject(err);
+            reject(error);
             reject({ message: "Transaction Failed" });
             console.error(error);
         });
