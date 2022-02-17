@@ -9,11 +9,9 @@ exports.default = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _lodash = _interopRequireDefault(require("lodash"));
+var _xdc = _interopRequireDefault(require("xdc3"));
 
-var _crypto = require("../../helpers/crypto");
-
-var _common = require("../common");
+var _components = require("./components/");
 
 var _jsxRuntime = require("react/jsx-runtime");
 
@@ -35,89 +33,69 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var PrivateKey = function PrivateKey(_ref) {
-  var cb = _ref.cb,
-      loading = _ref.loading,
-      back = _ref.back;
+// import "./App.css";
+var address = "xdc50d366a72012dfddae856e5e4525e8d01b698560";
+var ABI = [{
+  constant: true,
+  inputs: [{
+    name: "tokenId",
+    type: "uint256"
+  }],
+  name: "tokenURI",
+  outputs: [{
+    name: "",
+    type: "string"
+  }],
+  payable: false,
+  stateMutability: "view",
+  type: "function"
+}];
 
-  var _useState = (0, _react.useState)(""),
+function App() {
+  var _useState = (0, _react.useState)({}),
       _useState2 = _slicedToArray(_useState, 2),
-      privateKey = _useState2[0],
-      setPrivateKey = _useState2[1];
-
-  function renderMessage() {
-    if (_lodash.default.isEmpty(privateKey)) return /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
-      className: "no-key",
-      children: "\xA0"
-    });
-    var isValid = (0, _crypto.VerifyPrivateKey)(privateKey);
-    if (isValid) return /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
-      className: "valid-private-key",
-      children: "Private Key is valid"
-    });else if (isValid === false) return /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
-      className: "invalid-private-key",
-      children: "Invalid Private Key"
-    });
-  }
-
-  var btnName = "Submit";
-
-  if (loading) {
-    btnName = _common.LOADER_BOX;
-  }
+      wallet = _useState2[0],
+      setwallet = _useState2[1];
 
   return /*#__PURE__*/(0, _jsxRuntime.jsxs)("div", {
-    className: "modal-content",
-    children: [/*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
-      className: "modal-header border-bottom-0",
-      children: /*#__PURE__*/(0, _jsxRuntime.jsx)("h5", {
-        className: "modal-title",
-        id: "exampleModalLabel",
-        children: "Connect with Private Key"
-      })
-    }), /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
-      className: "modal-body",
-      children: /*#__PURE__*/(0, _jsxRuntime.jsxs)("form", {
-        className: "",
-        children: [/*#__PURE__*/(0, _jsxRuntime.jsxs)("div", {
-          className: "form-group",
-          children: [/*#__PURE__*/(0, _jsxRuntime.jsx)("label", {
-            children: "Enter Private Key"
-          }), /*#__PURE__*/(0, _jsxRuntime.jsx)("input", {
-            type: "password",
-            className: "form-control",
-            placeholder: "Enter Private Key",
-            value: privateKey,
-            onChange: function onChange(x) {
-              return setPrivateKey(x.target.value);
-            }
-          })]
-        }), /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
-          className: "private-key__message",
-          children: renderMessage()
-        }), /*#__PURE__*/(0, _jsxRuntime.jsx)("button", {
-          onClick: function onClick(e) {
-            e.preventDefault();
-            var account = (0, _crypto.GetAccountFromPK)(privateKey);
-            cb(account);
-          },
-          disabled: loading,
-          className: "btn btn-rounded btn-info mb-2",
-          children: btnName
-        }), /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {})]
-      })
-    }), /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
-      className: "modal-footer border-top-0 d-flex justify-content-center",
-      children: /*#__PURE__*/(0, _jsxRuntime.jsx)("button", {
-        onClick: back,
-        type: "button",
-        className: "back",
-        "data-dismiss": "modal",
-        children: "Back"
-      })
+    className: "App",
+    children: [/*#__PURE__*/(0, _jsxRuntime.jsx)(_components.XdcConnect, {
+      addToastContainer: true // showButton={tr}
+      ,
+      displayType: "grid",
+      btnClass: wallet.connected ? "btn btn-rounded btn-success" : "btn btn-rounded btn-warning",
+      btnName: wallet.connected ? "CONNECTED" : "CONNECT",
+      onConnect: function onConnect(wallet) {
+        console.log("user connected wallet", wallet);
+        var xdc3 = new _xdc.default(new _xdc.default.providers.HttpProvider("https://rpc.xinfin.network"));
+        var contract = new xdc3.eth.Contract(ABI, address);
+        var data = contract.methods.tokenURI(1).encodeABI();
+        var tx = {
+          to: address,
+          data: data
+        };
+        xdc3.eth.call(tx).then(console.log);
+        (0, _components.CallTransaction)(tx).then(function (x) {
+          console.log(xdc3.utils.hexToAscii(x));
+          console.log(xdc3.eth.abi.decodeParameter("string", x));
+        });
+        setwallet(wallet);
+      },
+      onDisconnect: function onDisconnect(wallet) {
+        console.log("user connected disconnect", wallet);
+        setwallet(wallet);
+      }
+    }), wallet.connected ? /*#__PURE__*/(0, _jsxRuntime.jsx)("button", {
+      onClick: _components.Disconnect,
+      children: "Logout"
+    }) : /*#__PURE__*/(0, _jsxRuntime.jsx)("button", {
+      onClick: function onClick() {
+        return (0, _components.ForceShowModal)();
+      },
+      children: "XDC Connect"
     })]
   });
-};
+}
 
-var _default = PrivateKey;
+var _default = App;
 exports.default = _default;

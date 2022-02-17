@@ -9,7 +9,8 @@ var LOADERS = {
   Keystore: "keystore",
   Privatekey: "privatekey",
   MetaMask: "metamask",
-  DcentInApp: "dcent-inapp"
+  DcentInApp: "dcent-inapp",
+  WalletConnect: "wallet-connect"
 };
 exports.LOADERS = LOADERS;
 var VALID_CHAINS = [50, 51, 551];

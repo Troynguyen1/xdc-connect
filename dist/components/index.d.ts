@@ -30,7 +30,8 @@ export type ValidProvider =
   | "xinpay"
   | "keystore"
   | "privatekey"
-  | "dcent-inapp";
+  | "dcent-inapp"
+  | "wallet-connect";
 
 export type DisplayType = "grid" | "row";
 

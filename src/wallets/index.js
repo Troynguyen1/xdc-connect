@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import * as xinpay from "./xinpay";
 import * as account from "./account";
 import * as dcentInApp from "./dcentInAppBrowser";
+import * as walletConnect from "./walletConnect";
 
 import store from "../redux/store";
 import { LOADERS, DEFAULT_PROVIDER } from "../helpers/constant";
@@ -19,6 +20,8 @@ function GetFuncFromLoader(loader) {
       return account;
     case LOADERS.DcentInApp:
       return dcentInApp;
+    case LOADERS.WalletConnect:
+      return walletConnect;
     default:
       return xinpay;
   }

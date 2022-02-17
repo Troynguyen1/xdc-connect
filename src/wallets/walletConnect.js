@@ -32,7 +32,6 @@ export async function GetChainId() {
 
 export async function initWalletConnect() {
   try {
-    _initListerner();
 
     connector = new NodeWalletConnect(
         {
@@ -58,26 +57,9 @@ export async function initWalletConnect() {
             });
         });
     }
-    connector.on("connect", (error, payload) => {
-        if (error) {
-          throw error;
-        }
-      
-        // Close QR Code Modal
-        WalletConnectQRCodeModal.close();
-      
-        // Get provided accounts and chainId
-        const { accounts, chainId } = payload.params[0];
-        return store.dispatch(
-            actions.WalletConnected({
-              address: accounts[0],
-              chainId,
-              loader: LOADERS.WalletConnect,
-              explorer: CHAIN_DATA[chainId],
-            })
-          );
-      });
+    _initListerner();
   } catch (e) {
+    console.log(e);
     if (e === "timeout") {
       toast(
         <div>
@@ -102,13 +84,13 @@ export function _initListerner() {
 
   if (addressChangeIntervalRef) clearInterval(addressChangeIntervalRef);
 
-  addressChangeIntervalRef = setInterval(async () => {
-    const accounts = await connector.accounts();
-    if (_.isEqual(accounts, addresses)) return;
-    console.log("accounts", accounts);
-    addresses = accounts;
-    store.dispatch(actions.AccountChanged(accounts[0]));
-  }, 1000);
+  // addressChangeIntervalRef = setInterval(async () => {
+  //   const accounts = await connector.accounts();
+  //   if (_.isEqual(accounts, addresses)) return;
+  //   console.log("accounts", accounts);
+  //   addresses = accounts;
+  //   store.dispatch(actions.AccountChanged(accounts[0]));
+  // }, 1000);
 
   connector.on("connect", (error, payload) => {
     if (error) {
@@ -124,7 +106,7 @@ export function _initListerner() {
     return store.dispatch(
         actions.WalletConnected({
           address: accounts[0],
-          chainId,
+          chain_id: chainId,
           loader: LOADERS.WalletConnect,
           explorer: CHAIN_DATA[chainId],
         })
@@ -157,6 +139,7 @@ export function _initListerner() {
 }
 
 export async function SendTransaction(tx) {
+  console.log(tx, "transaction");
   return new Promise((resolve, reject) => {
     connector
         .sendTransaction(tx)
