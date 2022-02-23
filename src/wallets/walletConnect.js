@@ -46,17 +46,14 @@ export async function initWalletConnect() {
           },
         },
       );
-    if (!connector.connected) {
-    // create new session
-        connector.createSession().then(() => {
-            // get uri for QR Code modal
-            const uri = connector.uri;
-            // display QR Code modal
-            WalletConnectQRCodeModal.open(uri, () => {
-            console.log("QR Code Modal closed");
-            });
+      connector.createSession().then(() => {
+        // get uri for QR Code modal
+        const uri = connector.uri;
+        // display QR Code modal
+        WalletConnectQRCodeModal.open(uri, () => {
+        console.log("QR Code Modal closed");
         });
-    }
+    });
     _initListerner();
   } catch (e) {
     console.log(e);
