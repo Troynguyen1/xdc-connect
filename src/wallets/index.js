@@ -132,3 +132,8 @@ export const CallTransaction = (tx) => {
   const loader = store.getState().wallet.loader;
   return GetFuncFromLoader(loader).CallTransaction(tx);
 };
+
+export const Disconnect = () => {
+  const loader = store.getState().wallet.loader;
+  return GetFuncFromLoader(loader).Disconnect();
+}

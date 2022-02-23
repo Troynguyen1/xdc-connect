@@ -5,6 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.Disconnect = Disconnect;
 exports.GetChainId = GetChainId;
 exports.GetProvider = GetProvider;
 exports.IsWalletConnectSupported = IsWalletConnectSupported;
@@ -131,18 +132,14 @@ function _initWalletConnect() {
                 name: "WalletConnect"
               }
             });
+            connector.createSession().then(function () {
+              // get uri for QR Code modal
+              var uri = connector.uri; // display QR Code modal
 
-            if (!connector.connected) {
-              // create new session
-              connector.createSession().then(function () {
-                // get uri for QR Code modal
-                var uri = connector.uri; // display QR Code modal
-
-                _qrcodeModal.default.open(uri, function () {
-                  console.log("QR Code Modal closed");
-                });
+              _qrcodeModal.default.open(uri, function () {
+                console.log("QR Code Modal closed");
               });
-            }
+            });
 
             _initListerner();
 
@@ -247,10 +244,14 @@ function SendTransaction(_x) {
 
 function _SendTransaction() {
   _SendTransaction = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(tx) {
+    var to;
     return regeneratorRuntime.wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
+            to = tx["to"];
+            to = "0x".concat(to.substring(3, to.length));
+            tx["to"] = to;
             console.log(tx, "transaction");
             return _context4.abrupt("return", new Promise(function (resolve, reject) {
               connector.sendTransaction(tx).then(function (result) {
@@ -267,7 +268,7 @@ function _SendTransaction() {
               });
             }));
 
-          case 2:
+          case 5:
           case "end":
             return _context4.stop();
         }
@@ -275,4 +276,27 @@ function _SendTransaction() {
     }, _callee4);
   }));
   return _SendTransaction.apply(this, arguments);
+}
+
+function Disconnect() {
+  return _Disconnect.apply(this, arguments);
+}
+
+function _Disconnect() {
+  _Disconnect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            _context5.next = 2;
+            return connector.killSession();
+
+          case 2:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5);
+  }));
+  return _Disconnect.apply(this, arguments);
 }

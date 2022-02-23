@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ApothemProvider = void 0;
 exports.CallTransaction = CallTransaction;
+exports.Disconnect = Disconnect;
 exports.GetChainId = GetChainId;
 exports.GetCurrentProvider = GetCurrentProvider;
 exports.GetNativeBalance = void 0;
@@ -849,4 +850,23 @@ function _IsLocked() {
     }, _callee14);
   }));
   return _IsLocked.apply(this, arguments);
+}
+
+function Disconnect() {
+  return _Disconnect.apply(this, arguments);
+}
+
+function _Disconnect() {
+  _Disconnect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15() {
+    return regeneratorRuntime.wrap(function _callee15$(_context15) {
+      while (1) {
+        switch (_context15.prev = _context15.next) {
+          case 0:
+          case "end":
+            return _context15.stop();
+        }
+      }
+    }, _callee15);
+  }));
+  return _Disconnect.apply(this, arguments);
 }

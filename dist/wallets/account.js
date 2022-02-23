@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.CallTransaction = CallTransaction;
+exports.Disconnect = Disconnect;
 exports.SendTransaction = SendTransaction;
 
 var _xdc = _interopRequireDefault(require("xdc3"));
@@ -250,4 +251,23 @@ function _CallTransaction() {
     }, _callee4);
   }));
   return _CallTransaction.apply(this, arguments);
+}
+
+function Disconnect() {
+  return _Disconnect.apply(this, arguments);
+}
+
+function _Disconnect() {
+  _Disconnect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5);
+  }));
+  return _Disconnect.apply(this, arguments);
 }

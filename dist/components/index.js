@@ -96,6 +96,8 @@ exports.CallTransaction = CallTransaction;
 
 var Disconnect = function Disconnect() {
   _store.default.dispatch(actions.WalletDisconnected());
+
+  Wallet.Disconnect();
 };
 
 exports.Disconnect = Disconnect;

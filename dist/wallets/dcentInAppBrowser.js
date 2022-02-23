@@ -6,7 +6,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.CallTransaction = CallTransaction;
-exports.GetChainId = exports.DcentSupported = void 0;
+exports.DcentSupported = void 0;
+exports.Disconnect = Disconnect;
+exports.GetChainId = void 0;
 exports.GetProvider = GetProvider;
 exports.SendTransaction = SendTransaction;
 exports._initListerner = _initListerner;
@@ -477,4 +479,23 @@ function _CallTransaction() {
     }, _callee9);
   }));
   return _CallTransaction.apply(this, arguments);
+}
+
+function Disconnect() {
+  return _Disconnect.apply(this, arguments);
+}
+
+function _Disconnect() {
+  _Disconnect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10() {
+    return regeneratorRuntime.wrap(function _callee10$(_context10) {
+      while (1) {
+        switch (_context10.prev = _context10.next) {
+          case 0:
+          case "end":
+            return _context10.stop();
+        }
+      }
+    }, _callee10);
+  }));
+  return _Disconnect.apply(this, arguments);
 }

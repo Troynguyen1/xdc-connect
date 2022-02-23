@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.CallTransaction = void 0;
+exports.Disconnect = exports.CallTransaction = void 0;
 exports.GetNativeBalance = GetNativeBalance;
 exports.SendTransaction = void 0;
 
@@ -163,3 +163,11 @@ var CallTransaction = function CallTransaction(tx) {
 };
 
 exports.CallTransaction = CallTransaction;
+
+var Disconnect = function Disconnect() {
+  var loader = _store.default.getState().wallet.loader;
+
+  return GetFuncFromLoader(loader).Disconnect();
+};
+
+exports.Disconnect = Disconnect;
