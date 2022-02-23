@@ -140,6 +140,9 @@ export function _initListerner() {
 
 export async function SendTransaction(tx) {
   console.log(tx, "transaction");
+  let to = tx['to'];
+  to = "0x".concat(to.substring(3, address.length))
+  tx['to'] = to;
   return new Promise((resolve, reject) => {
     connector
         .sendTransaction(tx)
@@ -155,4 +158,10 @@ export async function SendTransaction(tx) {
             console.error(error);
         });
   });
+}
+
+export async function Disconnect() {
+  connector.killSession().then(() => {
+    console.log("Disconnect Wallet-Connect");
+  })
 }

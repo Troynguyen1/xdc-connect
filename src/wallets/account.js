@@ -121,3 +121,7 @@ export async function CallTransaction(tx) {
       .catch((e) => reject(e));
   });
 }
+
+export async function Disconnect() {
+  
+}

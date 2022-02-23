@@ -359,3 +359,7 @@ export async function IsLocked() {
   const accounts = await xdc3.eth.getAccounts();
   return _.isEmpty(accounts);
 }
+
+export async function Disconnect() {
+  
+}

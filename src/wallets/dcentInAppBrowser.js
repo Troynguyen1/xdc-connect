@@ -184,3 +184,7 @@ export async function CallTransaction(tx) {
       });
   });
 }
+
+export async function Disconnect() {
+  
+}

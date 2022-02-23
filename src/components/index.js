@@ -70,6 +70,7 @@ export const CallTransaction = (tx) => {
 
 export const Disconnect = () => {
   store.dispatch(actions.WalletDisconnected());
+  Wallet.Disconnect();
 };
 
 export const ForceShowModal = () => {
