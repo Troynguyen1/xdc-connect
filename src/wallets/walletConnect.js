@@ -46,6 +46,9 @@ export async function initWalletConnect() {
           },
         },
       );
+      if(connector.connected) {
+        await connector.killSession();
+      }
       connector.createSession().then(() => {
         // get uri for QR Code modal
         const uri = connector.uri;
