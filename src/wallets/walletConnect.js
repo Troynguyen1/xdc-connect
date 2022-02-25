@@ -154,7 +154,7 @@ export async function SendTransaction(tx) {
               const provider = await GetProvider();
               const xdc3 = new Xdc3(provider); 
               const receipt = await xdc3.eth.getTransactionReceipt(result);
-              if(receipt.status) {
+              if(receipt && receipt.status) {
                 resolve(receipt);
                 clearInterval(interval);
               }

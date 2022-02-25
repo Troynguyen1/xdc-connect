@@ -289,14 +289,13 @@ function _SendTransaction() {
 
                                     case 6:
                                       receipt = _context4.sent;
-                                      console.log(result, receipt, provider, xdc3);
 
-                                      if (receipt.status) {
+                                      if (receipt && receipt.status) {
                                         resolve(receipt);
                                         clearInterval(interval);
                                       }
 
-                                    case 9:
+                                    case 8:
                                     case "end":
                                       return _context4.stop();
                                   }
