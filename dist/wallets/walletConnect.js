@@ -132,6 +132,16 @@ function _initWalletConnect() {
                 name: "WalletConnect"
               }
             });
+
+            if (!connector.session.connected) {
+              _context3.next = 5;
+              break;
+            }
+
+            _context3.next = 5;
+            return connector.killSession();
+
+          case 5:
             connector.createSession().then(function () {
               // get uri for QR Code modal
               var uri = connector.uri; // display QR Code modal
@@ -143,16 +153,16 @@ function _initWalletConnect() {
 
             _initListerner();
 
-            _context3.next = 14;
+            _context3.next = 17;
             break;
 
-          case 6:
-            _context3.prev = 6;
+          case 9:
+            _context3.prev = 9;
             _context3.t0 = _context3["catch"](0);
             console.log(_context3.t0);
 
             if (!(_context3.t0 === "timeout")) {
-              _context3.next = 12;
+              _context3.next = 15;
               break;
             }
 
@@ -163,7 +173,7 @@ function _initWalletConnect() {
             });
             return _context3.abrupt("return", _store.default.dispatch(actions.WalletDisconnected()));
 
-          case 12:
+          case 15:
             (0, _reactToastify.toast)( /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
               children: "Error while connecting to WalletConnect provider"
             }), {
@@ -171,12 +181,12 @@ function _initWalletConnect() {
             });
             return _context3.abrupt("return", _store.default.dispatch(actions.WalletDisconnected()));
 
-          case 14:
+          case 17:
           case "end":
             return _context3.stop();
         }
       }
-    }, _callee3, null, [[0, 6]]);
+    }, _callee3, null, [[0, 9]]);
   }));
   return _initWalletConnect.apply(this, arguments);
 }

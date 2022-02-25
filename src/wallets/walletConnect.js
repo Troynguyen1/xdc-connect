@@ -46,7 +46,7 @@ export async function initWalletConnect() {
           },
         },
       );
-      if(connector.connected) {
+      if(connector.session.connected) {
         await connector.killSession();
       }
       connector.createSession().then(() => {
