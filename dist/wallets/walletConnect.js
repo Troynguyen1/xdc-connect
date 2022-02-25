@@ -253,37 +253,87 @@ function SendTransaction(_x) {
 }
 
 function _SendTransaction() {
-  _SendTransaction = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(tx) {
+  _SendTransaction = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(tx) {
     var to;
-    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+    return regeneratorRuntime.wrap(function _callee6$(_context6) {
       while (1) {
-        switch (_context4.prev = _context4.next) {
+        switch (_context6.prev = _context6.next) {
           case 0:
             to = tx["to"];
             to = "0x".concat(to.substring(3, to.length));
             tx["to"] = to;
             console.log(tx, "transaction");
-            return _context4.abrupt("return", new Promise(function (resolve, reject) {
-              connector.sendTransaction(tx).then(function (result) {
-                // Returns transaction id (hash)
-                console.log(result);
-                resolve(result);
-              }).catch(function (error) {
-                // Error returned when rejected
-                reject(error);
-                reject({
-                  message: "Transaction Failed"
-                });
-                console.error(error);
-              });
+            return _context6.abrupt("return", new Promise(function (resolve, reject) {
+              connector.sendTransaction(tx).then( /*#__PURE__*/function () {
+                var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(result) {
+                  var interval;
+                  return regeneratorRuntime.wrap(function _callee5$(_context5) {
+                    while (1) {
+                      switch (_context5.prev = _context5.next) {
+                        case 0:
+                          try {
+                            interval = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
+                              var provider, xdc3, receipt;
+                              return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                                while (1) {
+                                  switch (_context4.prev = _context4.next) {
+                                    case 0:
+                                      _context4.next = 2;
+                                      return GetProvider();
+
+                                    case 2:
+                                      provider = _context4.sent;
+                                      xdc3 = new _xdc.default(provider);
+                                      _context4.next = 6;
+                                      return xdc3.eth.getTransactionReceipt(result);
+
+                                    case 6:
+                                      receipt = _context4.sent;
+                                      console.log(result, receipt, provider, xdc3);
+
+                                      if (receipt.status) {
+                                        resolve(receipt);
+                                        clearInterval(interval);
+                                      }
+
+                                    case 9:
+                                    case "end":
+                                      return _context4.stop();
+                                  }
+                                }
+                              }, _callee4);
+                            })), 2000);
+                          } catch (error) {
+                            clearInterval(interval);
+                            reject(error);
+                            reject({
+                              message: "Transaction Failed"
+                            });
+                            console.error(error);
+                          }
+
+                          ;
+
+                        case 2:
+                        case "end":
+                          return _context5.stop();
+                      }
+                    }
+                  }, _callee5);
+                }));
+
+                return function (_x2) {
+                  return _ref.apply(this, arguments);
+                };
+              }());
             }));
 
           case 5:
           case "end":
-            return _context4.stop();
+            return _context6.stop();
         }
       }
-    }, _callee4);
+    }, _callee6);
   }));
   return _SendTransaction.apply(this, arguments);
 }
@@ -293,20 +343,20 @@ function Disconnect() {
 }
 
 function _Disconnect() {
-  _Disconnect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
-    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+  _Disconnect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
+    return regeneratorRuntime.wrap(function _callee7$(_context7) {
       while (1) {
-        switch (_context5.prev = _context5.next) {
+        switch (_context7.prev = _context7.next) {
           case 0:
-            _context5.next = 2;
+            _context7.next = 2;
             return connector.killSession();
 
           case 2:
           case "end":
-            return _context5.stop();
+            return _context7.stop();
         }
       }
-    }, _callee5);
+    }, _callee7);
   }));
   return _Disconnect.apply(this, arguments);
 }

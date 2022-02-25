@@ -147,17 +147,26 @@ export async function SendTransaction(tx) {
   return new Promise((resolve, reject) => {
     connector
         .sendTransaction(tx)
-        .then(result => {
-            // Returns transaction id (hash)
-            console.log(result);
-            resolve(result);
-        })
-        .catch(error => {
-            // Error returned when rejected
+        .then(async (result) => {
+          let interval;
+          try {
+            interval = setInterval(async () => {
+              const provider = await GetProvider();
+              const xdc3 = new Xdc3(provider); 
+              const receipt = await xdc3.eth.getTransactionReceipt(result);
+              if(receipt.status) {
+                resolve(receipt);
+                clearInterval(interval);
+              }
+            }, 2000);
+          }
+          catch (error) {
+            clearInterval(interval);
             reject(error);
             reject({ message: "Transaction Failed" });
             console.error(error);
-        });
+          };
+        })
   });
 }
 
