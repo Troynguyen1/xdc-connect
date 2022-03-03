@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ApothemProvider = void 0;
 exports.CallTransaction = CallTransaction;
+exports.CheckWalletConnection = CheckWalletConnection;
 exports.Disconnect = Disconnect;
 exports.GetChainId = GetChainId;
 exports.GetCurrentProvider = GetCurrentProvider;
@@ -268,6 +269,13 @@ function _initXdc() {
 
           case 38:
             chain_id = _context7.sent;
+            localStorage.setItem(_constant.WALLET_STATUS, JSON.stringify({
+              connected: true,
+              chain_id: chain_id,
+              address: accounts[0],
+              loader: _constant.LOADERS.Xinpay,
+              explorer: _constant.CHAIN_DATA[chain_id]
+            }));
             return _context7.abrupt("return", _store.default.dispatch(actions.WalletConnected({
               address: accounts[0],
               chain_id: chain_id,
@@ -275,12 +283,12 @@ function _initXdc() {
               explorer: _constant.CHAIN_DATA[chain_id]
             })));
 
-          case 42:
-            _context7.prev = 42;
+          case 43:
+            _context7.prev = 43;
             _context7.t1 = _context7["catch"](0);
 
             if (!(_context7.t1 === "timeout")) {
-              _context7.next = 47;
+              _context7.next = 48;
               break;
             }
 
@@ -291,7 +299,7 @@ function _initXdc() {
             });
             return _context7.abrupt("return", _store.default.dispatch(actions.WalletDisconnected()));
 
-          case 47:
+          case 48:
             (0, _reactToastify.toast)( /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
               children: "Error while connecting to XDCPay provider"
             }), {
@@ -299,12 +307,12 @@ function _initXdc() {
             });
             return _context7.abrupt("return", _store.default.dispatch(actions.WalletDisconnected()));
 
-          case 49:
+          case 50:
           case "end":
             return _context7.stop();
         }
       }
-    }, _callee7, null, [[0, 42]]);
+    }, _callee7, null, [[0, 43]]);
   }));
   return _initXdc.apply(this, arguments);
 }
@@ -869,4 +877,18 @@ function _Disconnect() {
     }, _callee15);
   }));
   return _Disconnect.apply(this, arguments);
+}
+
+function CheckWalletConnection() {
+  var CurrentWalletStatus = localStorage.getItem(_constant.WALLET_STATUS);
+  if (!CurrentWalletStatus) return false;
+
+  _store.default.dispatch(actions.WalletConnected({
+    address: CurrentWalletStatus.address,
+    chain_id: CurrentWalletStatus.chain_id,
+    loader: CurrentWalletStatus.loader,
+    explorer: CurrentWalletStatus.explorer
+  }));
+
+  return true;
 }

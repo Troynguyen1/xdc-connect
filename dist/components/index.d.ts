@@ -115,3 +115,10 @@ export function ForceCloseModal(): void;
  *
  */
 export function SetGasMultiplier(gasMultiplier: number): void;
+
+/**
+ * API to update default chain id
+ *
+ *
+ */
+export function CheckWalletConnection(): boolean;

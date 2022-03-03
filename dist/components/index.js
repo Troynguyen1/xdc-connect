@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.XdcConnect = exports.SetGasMultiplier = exports.SendTransaction = exports.GetWallet = exports.GetNativeBalance = exports.ForceShowModal = exports.ForceCloseModal = exports.Disconnect = exports.CallTransaction = void 0;
+exports.XdcConnect = exports.SetGasMultiplier = exports.SendTransaction = exports.GetWallet = exports.GetNativeBalance = exports.ForceShowModal = exports.ForceCloseModal = exports.Disconnect = exports.CheckWalletConnection = exports.CallTransaction = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -22,6 +22,8 @@ var _store = _interopRequireDefault(require("../redux/store"));
 var Wallet = _interopRequireWildcard(require("../wallets"));
 
 var actions = _interopRequireWildcard(require("../actions/index"));
+
+var Xinpay = _interopRequireWildcard(require("../wallets/xinpay"));
 
 require("../assets/scss/main.scss");
 
@@ -125,3 +127,9 @@ var GetNativeBalance = function GetNativeBalance() {
 };
 
 exports.GetNativeBalance = GetNativeBalance;
+
+var CheckWalletConnection = function CheckWalletConnection() {
+  return Xinpay.CheckWalletConnection();
+};
+
+exports.CheckWalletConnection = CheckWalletConnection;

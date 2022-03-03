@@ -165,6 +165,8 @@ var CallTransaction = function CallTransaction(tx) {
 exports.CallTransaction = CallTransaction;
 
 var Disconnect = function Disconnect() {
+  localStorage.removeItem(_constant.WALLET_STATUS);
+
   var loader = _store.default.getState().wallet.loader;
 
   return GetFuncFromLoader(loader).Disconnect();

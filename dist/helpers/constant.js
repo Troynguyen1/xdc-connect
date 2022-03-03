@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.VALID_CHAINS = exports.NETWORK_NAME = exports.LOADERS = exports.HTTP_PROVIDER = exports.EXPLORER = exports.DEFAULT_PROVIDER = exports.DEFAULT_CHAIN_ID = exports.CHAIN_DATA = void 0;
+exports.WALLET_STATUS = exports.VALID_CHAINS = exports.NETWORK_NAME = exports.LOADERS = exports.HTTP_PROVIDER = exports.EXPLORER = exports.DEFAULT_PROVIDER = exports.DEFAULT_CHAIN_ID = exports.CHAIN_DATA = void 0;
 var LOADERS = {
   Xinpay: "xinpay",
   Keystore: "keystore",
@@ -42,3 +42,5 @@ var DEFAULT_PROVIDER = HTTP_PROVIDER[VALID_CHAINS[0]];
 exports.DEFAULT_PROVIDER = DEFAULT_PROVIDER;
 var EXPLORER = CHAIN_DATA[DEFAULT_CHAIN_ID];
 exports.EXPLORER = EXPLORER;
+var WALLET_STATUS = "wallet_status";
+exports.WALLET_STATUS = WALLET_STATUS;
