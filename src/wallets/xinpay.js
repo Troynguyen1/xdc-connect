@@ -3,7 +3,12 @@ import detectEthereumProvider from "@metamask/detect-provider";
 import _ from "lodash";
 
 import { GetRevertReason, IsJsonRpcError } from "../helpers/crypto";
-import { CHAIN_DATA, HTTP_PROVIDER, LOADERS } from "../helpers/constant";
+import {
+  CHAIN_DATA,
+  HTTP_PROVIDER,
+  LOADERS,
+  WALLET_STATUS,
+} from "../helpers/constant";
 
 import * as actions from "../actions";
 import store from "../redux/store";
@@ -115,6 +120,18 @@ export async function initXdc3() {
     const accounts = await xdc3.eth.getAccounts();
     addresses = accounts;
     const chain_id = await xdc3.eth.getChainId();
+
+    localStorage.setItem(
+			WALLET_STATUS,
+			JSON.stringify({
+				connected: true,
+				chain_id: chain_id,
+				address: accounts[0],
+				loader: LOADERS.Xinpay,
+				explorer: CHAIN_DATA[chain_id],
+			})
+		);
+
     return store.dispatch(
       actions.WalletConnected({
         address: accounts[0],
@@ -361,5 +378,21 @@ export async function IsLocked() {
 }
 
 export async function Disconnect() {
-  
+
+}
+
+export function CheckWalletConnection() {
+  const CurrentWalletStatus = localStorage.getItem(WALLET_STATUS);
+  if (!CurrentWalletStatus) return false;
+
+  store.dispatch(
+    actions.WalletConnected({
+      address: CurrentWalletStatus.address,
+      chain_id: CurrentWalletStatus.chain_id,
+      loader: CurrentWalletStatus.loader,
+      explorer: CurrentWalletStatus.explorer,
+    })
+  );
+
+  return true;
 }

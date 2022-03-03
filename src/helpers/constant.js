@@ -34,3 +34,5 @@ export const DEFAULT_CHAIN_ID = 50;
 export const DEFAULT_PROVIDER = HTTP_PROVIDER[VALID_CHAINS[0]];
 
 export const EXPLORER = CHAIN_DATA[DEFAULT_CHAIN_ID];
+
+export const WALLET_STATUS = "wallet_status";

@@ -12,6 +12,8 @@ import * as actions from "../actions/index";
 import "../assets/scss/main.scss";
 import "react-toastify/dist/ReactToastify.css";
 
+import {WALLET_STATUS} from "../helpers/constant";
+
 export const XdcConnect = (props) => {
   const toastContainer = props.addToastContainer ? (
     props.toastContainer ? (
@@ -87,4 +89,8 @@ export const SetGasMultiplier = (gasMultiplier) => {
 
 export const GetNativeBalance = () => {
   return Wallet.GetNativeBalance();
+};
+
+export const CheckWalletConnection = () => {
+  return Wallet.CheckWalletConnection();
 };
