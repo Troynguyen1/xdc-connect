@@ -8,11 +8,10 @@ import WalletConnect from "./wallet-connect/walletConnect";
 import store from "../redux/store";
 import * as Wallet from "../wallets";
 import * as actions from "../actions/index";
+import * as Xinpay from "../wallets/xinpay";
 
 import "../assets/scss/main.scss";
 import "react-toastify/dist/ReactToastify.css";
-
-import {WALLET_STATUS} from "../helpers/constant";
 
 export const XdcConnect = (props) => {
   const toastContainer = props.addToastContainer ? (
@@ -92,5 +91,5 @@ export const GetNativeBalance = () => {
 };
 
 export const CheckWalletConnection = () => {
-  return Wallet.CheckWalletConnection();
+  return Xinpay.CheckWalletConnection();
 };
