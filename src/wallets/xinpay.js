@@ -385,14 +385,26 @@ export function CheckWalletConnection() {
   const CurrentWalletStatus = JSON.parse(localStorage.getItem(WALLET_STATUS));
   if (!CurrentWalletStatus) return false;
 
-  store.dispatch(
-    actions.WalletConnected({
-      address: CurrentWalletStatus.address,
-      chain_id: CurrentWalletStatus.chain_id,
-      loader: CurrentWalletStatus.loader,
-      explorer: CurrentWalletStatus.explorer,
-    })
-  );
-
-  return true;
+  return GetProvider()
+  .then((provider) => {
+    xdc3 = new Xdc3(provider);
+    xdc3.eth.getAccounts()
+    .then((accounts) => {
+      if (CurrentWalletStatus.address === accounts[0]) {
+          store.dispatch(
+						actions.WalletConnected({
+							address: CurrentWalletStatus.address,
+							chain_id: CurrentWalletStatus.chain_id,
+							loader: CurrentWalletStatus.loader,
+							explorer: CurrentWalletStatus.explorer,
+						})
+					);
+        return true;
+      } else return false;
+    }).catch(() => {
+      return false;
+    });
+  }).catch(() => {
+    return false;
+  });
 }
