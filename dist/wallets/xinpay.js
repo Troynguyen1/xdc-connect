@@ -880,7 +880,7 @@ function _Disconnect() {
 }
 
 function CheckWalletConnection() {
-  var CurrentWalletStatus = localStorage.getItem(_constant.WALLET_STATUS);
+  var CurrentWalletStatus = JSON.parse(localStorage.getItem(_constant.WALLET_STATUS));
   if (!CurrentWalletStatus) return false;
 
   _store.default.dispatch(actions.WalletConnected({
