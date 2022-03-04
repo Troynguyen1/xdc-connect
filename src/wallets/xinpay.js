@@ -382,7 +382,7 @@ export async function Disconnect() {
 }
 
 export function CheckWalletConnection() {
-  const CurrentWalletStatus = localStorage.getItem(WALLET_STATUS);
+  const CurrentWalletStatus = JSON.parse(localStorage.getItem(WALLET_STATUS));
   if (!CurrentWalletStatus) return false;
 
   store.dispatch(
