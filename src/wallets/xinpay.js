@@ -391,16 +391,19 @@ export function CheckWalletConnection() {
     xdc3.eth.getAccounts()
     .then((accounts) => {
       if (CurrentWalletStatus.address === accounts[0]) {
-          store.dispatch(
-						actions.WalletConnected({
-							address: CurrentWalletStatus.address,
-							chain_id: CurrentWalletStatus.chain_id,
-							loader: CurrentWalletStatus.loader,
-							explorer: CurrentWalletStatus.explorer,
-						})
-					);
+        store.dispatch(
+          actions.WalletConnected({
+            address: CurrentWalletStatus.address,
+            chain_id: CurrentWalletStatus.chain_id,
+            loader: CurrentWalletStatus.loader,
+            explorer: CurrentWalletStatus.explorer,
+          })
+        );
         return true;
-      } else return false;
+      } else {
+        store.dispatch(actions.WalletDisconnected());
+        return false;
+      }
     }).catch(() => {
       return false;
     });
