@@ -180,13 +180,11 @@ export function _initListerner() {
   window.ethereum.on("accountsChanged", async (data) => {
     const accounts = await xdc3.eth.getAccounts();
     addresses = accounts;
-    updateWalletAddress(accounts[0]);
     store.dispatch(actions.AccountChanged(accounts[0]));
   });
 
   window.ethereum.on("chainChanged", async (data) => {
     const chain_id = await xdc3.eth.getChainId();
-    updateWalletChainId(chain_id);
     store.dispatch(actions.NetworkChanged(chain_id));
   });
 
