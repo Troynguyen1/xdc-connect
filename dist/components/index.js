@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.XdcConnect = exports.SetGasMultiplier = exports.SendTransaction = exports.GetWallet = exports.GetNativeBalance = exports.ForceShowModal = exports.ForceCloseModal = exports.Disconnect = exports.CheckWalletConnection = exports.CallTransaction = void 0;
+exports.removeEthereumListener = exports._initListerner = exports.XdcConnect = exports.SetGasMultiplier = exports.SendTransaction = exports.GetWallet = exports.GetNativeBalance = exports.ForceShowModal = exports.ForceCloseModal = exports.Disconnect = exports.CheckWalletConnection = exports.CallTransaction = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -133,3 +133,15 @@ var CheckWalletConnection = function CheckWalletConnection() {
 };
 
 exports.CheckWalletConnection = CheckWalletConnection;
+
+var _initListerner = function _initListerner() {
+  Xinpay._initListerner();
+};
+
+exports._initListerner = _initListerner;
+
+var removeEthereumListener = function removeEthereumListener() {
+  Xinpay.removeEthereumListener();
+};
+
+exports.removeEthereumListener = removeEthereumListener;

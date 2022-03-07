@@ -119,6 +119,17 @@ export function SetGasMultiplier(gasMultiplier: number): void;
 /**
  * API to update default chain id
  *
- *
  */
 export function CheckWalletConnection(): boolean;
+
+/**
+ * API to init Ethereum event listener
+ *
+ */
+export function _initListerner(): void;
+
+/**
+ * API to remove Ethereum event listener
+ *
+ */
+export function removeEthereumEventListener(): void;

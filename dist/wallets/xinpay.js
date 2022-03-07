@@ -19,6 +19,7 @@ exports.MainnetProvider = void 0;
 exports.SendTransaction = SendTransaction;
 exports._initListerner = _initListerner;
 exports.initXdc3 = initXdc3;
+exports.removeEthereumListener = removeEthereumListener;
 
 var _xdc = _interopRequireDefault(require("xdc3"));
 
@@ -320,38 +321,41 @@ function _initXdc() {
 function _initListerner() {
   window.ethereum.removeAllListeners();
   if (addressChangeIntervalRef) clearInterval(addressChangeIntervalRef);
-  addressChangeIntervalRef = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-    var accounts;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.next = 2;
-            return xdc3.eth.getAccounts();
+  GetProvider().then(function (provider) {
+    xdc3 = new _xdc.default(provider);
+    addressChangeIntervalRef = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      var accounts;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return xdc3.eth.getAccounts();
 
-          case 2:
-            accounts = _context.sent;
+            case 2:
+              accounts = _context.sent;
 
-            if (!_lodash.default.isEqual(accounts, addresses)) {
-              _context.next = 5;
-              break;
-            }
+              if (!_lodash.default.isEqual(accounts, addresses)) {
+                _context.next = 5;
+                break;
+              }
 
-            return _context.abrupt("return");
+              return _context.abrupt("return");
 
-          case 5:
-            console.log("accounts", accounts);
-            addresses = accounts;
+            case 5:
+              console.log("accounts", accounts);
+              addresses = accounts;
 
-            _store.default.dispatch(actions.AccountChanged(accounts[0]));
+              _store.default.dispatch(actions.AccountChanged(accounts[0]));
 
-          case 8:
-          case "end":
-            return _context.stop();
+            case 8:
+            case "end":
+              return _context.stop();
+          }
         }
-      }
-    }, _callee);
-  })), 1000);
+      }, _callee);
+    })), 1000);
+  });
   window.ethereum.on("accountsChanged", /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(data) {
       var accounts;
@@ -364,12 +368,11 @@ function _initListerner() {
 
             case 2:
               accounts = _context2.sent;
-              console.log("accounts", accounts);
               addresses = accounts;
 
               _store.default.dispatch(actions.AccountChanged(accounts[0]));
 
-            case 6:
+            case 5:
             case "end":
               return _context2.stop();
           }
@@ -454,11 +457,16 @@ function _initListerner() {
   }());
   window.ethereum.on("disconnect", function (data) {
     console.log("disconnect", data);
+    localStorage.removeItem(_constant.WALLET_STATUS);
     return _store.default.dispatch(actions.WalletDisconnected());
   });
   window.ethereum.on("message", function (data) {
     console.log("message", data);
   });
+}
+
+function removeEthereumListener() {
+  window.ethereum.removeAllListeners();
 }
 
 function GetCurrentProvider() {
@@ -882,13 +890,27 @@ function _Disconnect() {
 function CheckWalletConnection() {
   var CurrentWalletStatus = JSON.parse(localStorage.getItem(_constant.WALLET_STATUS));
   if (!CurrentWalletStatus) return false;
+  return GetProvider().then(function (provider) {
+    xdc3 = new _xdc.default(provider);
+    xdc3.eth.getAccounts().then(function (accounts) {
+      if (CurrentWalletStatus.address === accounts[0]) {
+        _store.default.dispatch(actions.WalletConnected({
+          address: CurrentWalletStatus.address,
+          chain_id: CurrentWalletStatus.chain_id,
+          loader: CurrentWalletStatus.loader,
+          explorer: CurrentWalletStatus.explorer
+        }));
 
-  _store.default.dispatch(actions.WalletConnected({
-    address: CurrentWalletStatus.address,
-    chain_id: CurrentWalletStatus.chain_id,
-    loader: CurrentWalletStatus.loader,
-    explorer: CurrentWalletStatus.explorer
-  }));
+        return true;
+      } else {
+        _store.default.dispatch(actions.WalletDisconnected());
 
-  return true;
+        return false;
+      }
+    }).catch(function () {
+      return false;
+    });
+  }).catch(function () {
+    return false;
+  });
 }
