@@ -165,23 +165,28 @@ export function _initListerner() {
 
   if (addressChangeIntervalRef) clearInterval(addressChangeIntervalRef);
 
-  addressChangeIntervalRef = setInterval(async () => {
-    const accounts = await xdc3.eth.getAccounts();
-    if (_.isEqual(accounts, addresses)) return;
-    console.log("accounts", accounts);
-    addresses = accounts;
-    store.dispatch(actions.AccountChanged(accounts[0]));
-  }, 1000);
+  GetProvider()
+  .then((provider) => {
+    xdc3 = new Xdc3(provider);
+    addressChangeIntervalRef = setInterval(async () => {
+      const accounts = await xdc3.eth.getAccounts();
+      if (_.isEqual(accounts, addresses)) return;
+      console.log("accounts", accounts);
+      addresses = accounts;
+      store.dispatch(actions.AccountChanged(accounts[0]));
+    }, 1000);
+  });
 
   window.ethereum.on("accountsChanged", async (data) => {
     const accounts = await xdc3.eth.getAccounts();
-    console.log("accounts", accounts);
     addresses = accounts;
+    updateWalletAddress(accounts[0]);
     store.dispatch(actions.AccountChanged(accounts[0]));
   });
 
   window.ethereum.on("chainChanged", async (data) => {
     const chain_id = await xdc3.eth.getChainId();
+    updateWalletChainId(chain_id);
     store.dispatch(actions.NetworkChanged(chain_id));
   });
 
@@ -202,12 +207,17 @@ export function _initListerner() {
 
   window.ethereum.on("disconnect", (data) => {
     console.log("disconnect", data);
+    localStorage.removeItem(WALLET_STATUS);
     return store.dispatch(actions.WalletDisconnected());
   });
 
   window.ethereum.on("message", (data) => {
     console.log("message", data);
   });
+}
+
+export function removeEthereumListener() {
+  window.ethereum.removeAllListeners();
 }
 
 export async function GetCurrentProvider() {

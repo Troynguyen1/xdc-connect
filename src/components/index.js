@@ -93,3 +93,11 @@ export const GetNativeBalance = () => {
 export const CheckWalletConnection = () => {
   return Xinpay.CheckWalletConnection();
 };
+
+export const _initListerner = () => {
+  Xinpay._initListerner();
+};
+
+export const removeEthereumListener = () => {
+  Xinpay.removeEthereumListener();
+};
