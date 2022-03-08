@@ -447,14 +447,17 @@ export function CheckWalletConnection() {
     .then((accounts) => {
       console.log("Accounts", accounts);
         if (connectWalletConnector) {
-          store.dispatch(
-            actions.WalletConnected({
-              address: CurrentWalletStatus.address,
-              chain_id: CurrentWalletStatus.chain_id,
-              loader: CurrentWalletStatus.loader,
-              explorer: CurrentWalletStatus.explorer,
-            })
-          );
+          xdc3.eth.getChainId()
+          .then((chain_id) => {
+						store.dispatch(
+							actions.WalletConnected({
+								address: CurrentWalletStatus.accounts[0],
+								chain_id: CurrentWalletStatus.chainId,
+								loader: CurrentWalletStatus.loader,
+								explorer: CHAIN_DATA[chain_id],
+							})
+						);
+					});
           return true;
         } else if (CurrentWalletStatus.address === accounts[0]) {
 					store.dispatch(

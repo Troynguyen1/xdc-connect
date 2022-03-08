@@ -934,13 +934,14 @@ function CheckWalletConnection() {
       console.log("Accounts", accounts);
 
       if (connectWalletConnector) {
-        _store.default.dispatch(actions.WalletConnected({
-          address: CurrentWalletStatus.address,
-          chain_id: CurrentWalletStatus.chain_id,
-          loader: CurrentWalletStatus.loader,
-          explorer: CurrentWalletStatus.explorer
-        }));
-
+        xdc3.eth.getChainId().then(function (chain_id) {
+          _store.default.dispatch(actions.WalletConnected({
+            address: CurrentWalletStatus.accounts[0],
+            chain_id: CurrentWalletStatus.chainId,
+            loader: CurrentWalletStatus.loader,
+            explorer: _constant.CHAIN_DATA[chain_id]
+          }));
+        });
         return true;
       } else if (CurrentWalletStatus.address === accounts[0]) {
         _store.default.dispatch(actions.WalletConnected({
