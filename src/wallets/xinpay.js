@@ -218,7 +218,7 @@ export function _initListerner() {
 
 export function removeEthereumListener() {
   if (window.ethereum) {
-    window.ethereum.removeAllListeners();
+    return window.ethereum.removeAllListeners();
   } else {
     toast(
       <div>
@@ -231,6 +231,7 @@ export function removeEthereumListener() {
         autoClose: false,
       }
     );
+    return;
   }
 }
 

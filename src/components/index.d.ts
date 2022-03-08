@@ -132,4 +132,4 @@ export function _initListerner(): void;
  * API to remove Ethereum event listener
  *
  */
-export function removeEthereumEventListener(): void;
+export function removeEthereumEventListener(): any;

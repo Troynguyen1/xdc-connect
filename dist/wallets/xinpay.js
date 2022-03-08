@@ -468,7 +468,7 @@ function _initListerner() {
 
 function removeEthereumListener() {
   if (window.ethereum) {
-    window.ethereum.removeAllListeners();
+    return window.ethereum.removeAllListeners();
   } else {
     (0, _reactToastify.toast)( /*#__PURE__*/(0, _jsxRuntime.jsxs)("div", {
       children: ["XDCPay not available in the browser. Please refer", " ", /*#__PURE__*/(0, _jsxRuntime.jsx)("a", {
@@ -478,6 +478,7 @@ function removeEthereumListener() {
     }), {
       autoClose: false
     });
+    return;
   }
 }
 
