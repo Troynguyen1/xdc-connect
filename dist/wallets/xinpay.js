@@ -932,7 +932,16 @@ function CheckWalletConnection() {
     xdc3.eth.getAccounts().then(function (accounts) {
       console.log("Accounts", accounts);
 
-      if (CurrentWalletStatus.address === accounts[0]) {
+      if (connectWalletConnector) {
+        _store.default.dispatch(actions.WalletConnected({
+          address: CurrentWalletStatus.address,
+          chain_id: CurrentWalletStatus.chain_id,
+          loader: CurrentWalletStatus.loader,
+          explorer: CurrentWalletStatus.explorer
+        }));
+
+        return true;
+      } else if (CurrentWalletStatus.address === accounts[0]) {
         _store.default.dispatch(actions.WalletConnected({
           address: CurrentWalletStatus.address,
           chain_id: CurrentWalletStatus.chain_id,
