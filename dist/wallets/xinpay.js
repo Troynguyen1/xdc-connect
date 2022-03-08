@@ -887,10 +887,20 @@ function Disconnect() {
 
 function _Disconnect() {
   _Disconnect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15() {
+    var provider;
     return regeneratorRuntime.wrap(function _callee15$(_context15) {
       while (1) {
         switch (_context15.prev = _context15.next) {
           case 0:
+            _context15.next = 2;
+            return GetProvider();
+
+          case 2:
+            provider = _context15.sent;
+            xdc3 = new _xdc.default(provider);
+            return _context15.abrupt("return", xdc3.eth.currentProvider.disconnect);
+
+          case 5:
           case "end":
             return _context15.stop();
         }

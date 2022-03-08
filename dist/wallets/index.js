@@ -166,6 +166,7 @@ exports.CallTransaction = CallTransaction;
 
 var Disconnect = function Disconnect() {
   localStorage.removeItem(_constant.XDC_PAY);
+  xinpay.Disconnect();
 
   var loader = _store.default.getState().wallet.loader;
 

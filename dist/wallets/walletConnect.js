@@ -349,10 +349,15 @@ function _Disconnect() {
       while (1) {
         switch (_context7.prev = _context7.next) {
           case 0:
-            _context7.next = 2;
+            if (!connector) {
+              _context7.next = 3;
+              break;
+            }
+
+            _context7.next = 3;
             return connector.killSession();
 
-          case 2:
+          case 3:
           case "end":
             return _context7.stop();
         }
