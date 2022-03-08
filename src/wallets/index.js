@@ -135,6 +135,7 @@ export const CallTransaction = (tx) => {
 
 export const Disconnect = () => {
   localStorage.removeItem(XDC_PAY);
+  xinpay.Disconnect();
   const loader = store.getState().wallet.loader;
   return GetFuncFromLoader(loader).Disconnect();
 }

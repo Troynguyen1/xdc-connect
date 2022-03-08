@@ -178,7 +178,7 @@ export async function SendTransaction(tx) {
 }
 
 export async function Disconnect() {
-  await connector.killSession();
+  if (connector) await connector.killSession();
 }
 
 export function checkConnection() {

@@ -403,7 +403,9 @@ export async function IsLocked() {
 }
 
 export async function Disconnect() {
-
+  const provider = await GetProvider();
+	xdc3 = new Xdc3(provider);
+  return xdc3.eth.currentProvider.disconnect;
 }
 
 export function CheckWalletConnection() {
