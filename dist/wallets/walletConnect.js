@@ -215,6 +215,7 @@ function _initListerner() {
         accounts = _payload$params$.accounts,
         chainId = _payload$params$.chainId;
     addresses = accounts;
+    localStorage.removeItem(_constant.XDC_PAY);
     return _store.default.dispatch(actions.WalletConnected({
       address: accounts[0],
       chain_id: chainId,

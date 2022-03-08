@@ -8,6 +8,7 @@ import {
 	HTTP_PROVIDER,
 	LOADERS,
 	WALLET_CONNECT,
+	XDC_PAY,
 } from "../helpers/constant";
 
 import * as actions from "../actions";
@@ -108,6 +109,7 @@ export function _initListerner() {
     // Get provided accounts and chainId
     const { accounts, chainId } = payload.params[0];
     addresses = accounts;
+    localStorage.removeItem(XDC_PAY);
     return store.dispatch(
         actions.WalletConnected({
           address: accounts[0],

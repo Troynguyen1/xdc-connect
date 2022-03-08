@@ -122,6 +122,7 @@ export async function initXdc3() {
     addresses = accounts;
     const chain_id = await xdc3.eth.getChainId();
 
+    localStorage.removeItem(WALLET_CONNECT);
     localStorage.setItem(
 			XDC_PAY,
 			JSON.stringify({
@@ -435,6 +436,7 @@ export function CheckWalletConnection() {
   }
 
   if (CurrentWalletStatus === null) return false;
+  console.log("CurrentWalletStatus: ", CurrentWalletStatus);
 
   return GetProvider()
   .then((provider) => {
