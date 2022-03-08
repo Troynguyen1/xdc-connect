@@ -270,7 +270,7 @@ function _initXdc() {
 
           case 38:
             chain_id = _context7.sent;
-            localStorage.setItem(_constant.WALLET_STATUS, JSON.stringify({
+            localStorage.setItem(_constant.XDC_PAY, JSON.stringify({
               connected: true,
               chain_id: chain_id,
               address: accounts[0],
@@ -457,7 +457,7 @@ function _initListerner() {
   }());
   window.ethereum.on("disconnect", function (data) {
     console.log("disconnect", data);
-    localStorage.removeItem(_constant.WALLET_STATUS);
+    localStorage.removeItem(_constant.XDC_PAY);
     return _store.default.dispatch(actions.WalletDisconnected());
   });
   window.ethereum.on("message", function (data) {
@@ -466,7 +466,18 @@ function _initListerner() {
 }
 
 function removeEthereumListener() {
-  window.ethereum.removeAllListeners();
+  if (window.ethereum) {
+    window.ethereum.removeAllListeners();
+  } else {
+    (0, _reactToastify.toast)( /*#__PURE__*/(0, _jsxRuntime.jsxs)("div", {
+      children: ["XDCPay not available in the browser. Please refer", " ", /*#__PURE__*/(0, _jsxRuntime.jsx)("a", {
+        href: "https://chrome.google.com/webstore/detail/xdcpay/bocpokimicclpaiekenaeelehdjllofo?hl=en",
+        children: "here"
+      })]
+    }), {
+      autoClose: false
+    });
+  }
 }
 
 function GetCurrentProvider() {
@@ -888,11 +899,37 @@ function _Disconnect() {
 }
 
 function CheckWalletConnection() {
-  var CurrentWalletStatus = JSON.parse(localStorage.getItem(_constant.WALLET_STATUS));
-  if (!CurrentWalletStatus) return false;
+  if (!window.ethereum) {
+    (0, _reactToastify.toast)( /*#__PURE__*/(0, _jsxRuntime.jsxs)("div", {
+      children: ["XDCPay not available in the browser. Please refer", " ", /*#__PURE__*/(0, _jsxRuntime.jsx)("a", {
+        href: "https://chrome.google.com/webstore/detail/xdcpay/bocpokimicclpaiekenaeelehdjllofo?hl=en",
+        children: "here"
+      })]
+    }), {
+      autoClose: false
+    });
+  }
+
+  var connectWalletConnector = JSON.parse(localStorage.getItem(_constant.WALLET_CONNECT));
+  var xdcPayConnector = JSON.parse(localStorage.getItem(_constant.XDC_PAY));
+  var CurrentWalletStatus = null;
+
+  if (connectWalletConnector) {
+    CurrentWalletStatus = connectWalletConnector;
+    CurrentWalletStatus.loader = 'wallet-connect';
+  } else if (xdcPayConnector) {
+    CurrentWalletStatus = xdcPayConnector;
+  } else {
+    return false;
+  }
+
+  if (CurrentWalletStatus === null) return false;
   return GetProvider().then(function (provider) {
+    console.log("Provider", provider);
     xdc3 = new _xdc.default(provider);
     xdc3.eth.getAccounts().then(function (accounts) {
+      console.log("Accounts", accounts);
+
       if (CurrentWalletStatus.address === accounts[0]) {
         _store.default.dispatch(actions.WalletConnected({
           address: CurrentWalletStatus.address,

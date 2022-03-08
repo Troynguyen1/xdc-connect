@@ -427,6 +427,7 @@ export function CheckWalletConnection() {
 
   if (connectWalletConnector) {
     CurrentWalletStatus = connectWalletConnector;
+    CurrentWalletStatus.loader = 'wallet-connect';
   } else if (xdcPayConnector) {
     CurrentWalletStatus = xdcPayConnector;
 	} else {

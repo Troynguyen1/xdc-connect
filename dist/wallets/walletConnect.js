@@ -11,6 +11,7 @@ exports.GetProvider = GetProvider;
 exports.IsWalletConnectSupported = IsWalletConnectSupported;
 exports.SendTransaction = SendTransaction;
 exports._initListerner = _initListerner;
+exports.checkConnection = checkConnection;
 exports.initWalletConnect = initWalletConnect;
 
 var _xdc = _interopRequireDefault(require("xdc3"));
@@ -359,3 +360,9 @@ function _Disconnect() {
   }));
   return _Disconnect.apply(this, arguments);
 }
+
+function checkConnection() {
+  console.log("Connector: ", connector);
+}
+
+;
