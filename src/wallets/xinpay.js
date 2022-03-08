@@ -4,10 +4,11 @@ import _ from "lodash";
 
 import { GetRevertReason, IsJsonRpcError } from "../helpers/crypto";
 import {
-  CHAIN_DATA,
-  HTTP_PROVIDER,
-  LOADERS,
-  WALLET_STATUS,
+	CHAIN_DATA,
+	HTTP_PROVIDER,
+	LOADERS,
+	XDC_PAY,
+	WALLET_CONNECT,
 } from "../helpers/constant";
 
 import * as actions from "../actions";
@@ -122,7 +123,7 @@ export async function initXdc3() {
     const chain_id = await xdc3.eth.getChainId();
 
     localStorage.setItem(
-			WALLET_STATUS,
+			XDC_PAY,
 			JSON.stringify({
 				connected: true,
 				chain_id: chain_id,
@@ -205,7 +206,7 @@ export function _initListerner() {
 
   window.ethereum.on("disconnect", (data) => {
     console.log("disconnect", data);
-    localStorage.removeItem(WALLET_STATUS);
+    localStorage.removeItem(XDC_PAY);
     return store.dispatch(actions.WalletDisconnected());
   });
 
@@ -215,7 +216,21 @@ export function _initListerner() {
 }
 
 export function removeEthereumListener() {
-  window.ethereum.removeAllListeners();
+  if (window.ethereum) {
+    window.ethereum.removeAllListeners();
+  } else {
+    toast(
+      <div>
+        XDCPay not available in the browser. Please refer{" "}
+        <a href="https://chrome.google.com/webstore/detail/xdcpay/bocpokimicclpaiekenaeelehdjllofo?hl=en">
+          here
+        </a>
+      </div>,
+      {
+        autoClose: false,
+      }
+    );
+  }
 }
 
 export async function GetCurrentProvider() {
@@ -390,14 +405,43 @@ export async function Disconnect() {
 }
 
 export function CheckWalletConnection() {
-  const CurrentWalletStatus = JSON.parse(localStorage.getItem(WALLET_STATUS));
-  if (!CurrentWalletStatus) return false;
+  if (!window.ethereum) {
+    toast(
+      <div>
+        XDCPay not available in the browser. Please refer{" "}
+        <a href="https://chrome.google.com/webstore/detail/xdcpay/bocpokimicclpaiekenaeelehdjllofo?hl=en">
+          here
+        </a>
+      </div>,
+      {
+        autoClose: false,
+      }
+    );
+  }
+  const connectWalletConnector = JSON.parse(
+		localStorage.getItem(WALLET_CONNECT)
+	);
+  const xdcPayConnector = JSON.parse(localStorage.getItem(XDC_PAY));
+
+  let CurrentWalletStatus = null;
+
+  if (connectWalletConnector) {
+    CurrentWalletStatus = connectWalletConnector;
+  } else if (xdcPayConnector) {
+    CurrentWalletStatus = xdcPayConnector;
+	} else {
+    return false;
+  }
+
+  if (CurrentWalletStatus === null) return false;
 
   return GetProvider()
   .then((provider) => {
+    console.log("Provider", provider);
     xdc3 = new Xdc3(provider);
     xdc3.eth.getAccounts()
     .then((accounts) => {
+      console.log("Accounts", accounts);
       if (CurrentWalletStatus.address === accounts[0]) {
         store.dispatch(
           actions.WalletConnected({

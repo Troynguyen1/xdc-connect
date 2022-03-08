@@ -3,7 +3,12 @@ import detectEthereumProvider from "@metamask/detect-provider";
 import _ from "lodash";
 
 import { GetRevertReason, IsJsonRpcError } from "../helpers/crypto";
-import { CHAIN_DATA, HTTP_PROVIDER, LOADERS } from "../helpers/constant";
+import {
+	CHAIN_DATA,
+	HTTP_PROVIDER,
+	LOADERS,
+	WALLET_CONNECT,
+} from "../helpers/constant";
 
 import * as actions from "../actions";
 import store from "../redux/store";
@@ -173,3 +178,7 @@ export async function SendTransaction(tx) {
 export async function Disconnect() {
   await connector.killSession();
 }
+
+export function checkConnection() {
+  console.log("Connector: ", connector);
+};
