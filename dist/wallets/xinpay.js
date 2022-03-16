@@ -320,6 +320,7 @@ function _initXdc() {
 }
 
 function _initListerner() {
+  if (!window.ethereum) return;
   window.ethereum.removeAllListeners();
   if (addressChangeIntervalRef) clearInterval(addressChangeIntervalRef);
   GetProvider().then(function (provider) {
