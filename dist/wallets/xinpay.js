@@ -145,7 +145,7 @@ function initXdc3() {
 
 function _initXdc() {
   _initXdc = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
-    var currentProvider, isLocked, provider, accounts, chain_id;
+    var currentProvider, isLocked, isConnected, provider, accounts, chain_id;
     return regeneratorRuntime.wrap(function _callee7$(_context7) {
       while (1) {
         switch (_context7.prev = _context7.next) {
@@ -248,27 +248,32 @@ function _initXdc() {
 
           case 25:
             _context7.next = 27;
-            return window.ethereum.enable();
+            return window.ethereum.isConnected();
 
           case 27:
-            _initListerner();
-
+            isConnected = _context7.sent;
             _context7.next = 30;
-            return GetProvider();
+            return window.ethereum.enable();
 
           case 30:
+            _initListerner();
+
+            _context7.next = 33;
+            return GetProvider();
+
+          case 33:
             provider = _context7.sent;
             xdc3 = new _xdc.default(provider);
-            _context7.next = 34;
+            _context7.next = 37;
             return xdc3.eth.getAccounts();
 
-          case 34:
+          case 37:
             accounts = _context7.sent;
             addresses = accounts;
-            _context7.next = 38;
+            _context7.next = 41;
             return xdc3.eth.getChainId();
 
-          case 38:
+          case 41:
             chain_id = _context7.sent;
             localStorage.removeItem(_constant.WALLET_CONNECT);
             localStorage.setItem(_constant.XDC_PAY, JSON.stringify({
@@ -285,12 +290,12 @@ function _initXdc() {
               explorer: _constant.CHAIN_DATA[chain_id]
             })));
 
-          case 44:
-            _context7.prev = 44;
+          case 47:
+            _context7.prev = 47;
             _context7.t1 = _context7["catch"](0);
 
             if (!(_context7.t1 === "timeout")) {
-              _context7.next = 49;
+              _context7.next = 52;
               break;
             }
 
@@ -301,7 +306,7 @@ function _initXdc() {
             });
             return _context7.abrupt("return", _store.default.dispatch(actions.WalletDisconnected()));
 
-          case 49:
+          case 52:
             (0, _reactToastify.toast)( /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
               children: "Error while connecting to XDCPay provider"
             }), {
@@ -309,12 +314,12 @@ function _initXdc() {
             });
             return _context7.abrupt("return", _store.default.dispatch(actions.WalletDisconnected()));
 
-          case 51:
+          case 54:
           case "end":
             return _context7.stop();
         }
       }
-    }, _callee7, null, [[0, 44]]);
+    }, _callee7, null, [[0, 47]]);
   }));
   return _initXdc.apply(this, arguments);
 }
@@ -513,7 +518,7 @@ function _GetCurrentProvider() {
           case 5:
             chainId = _context8.sent;
 
-            if (![50, 51, 551].includes(chainId)) {
+            if (![1, 4, 421611, 137, 80001, 50, 51, 551].includes(chainId)) {
               _context8.next = 8;
               break;
             }
@@ -929,7 +934,7 @@ function CheckWalletConnection() {
 
   if (connectWalletConnector) {
     CurrentWalletStatus = connectWalletConnector;
-    CurrentWalletStatus.loader = 'wallet-connect';
+    CurrentWalletStatus.loader = "wallet-connect";
   } else if (xdcPayConnector) {
     CurrentWalletStatus = xdcPayConnector;
   } else {

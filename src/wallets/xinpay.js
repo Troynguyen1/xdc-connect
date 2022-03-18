@@ -4,11 +4,11 @@ import _ from "lodash";
 
 import { GetRevertReason, IsJsonRpcError } from "../helpers/crypto";
 import {
-	CHAIN_DATA,
-	HTTP_PROVIDER,
-	LOADERS,
-	XDC_PAY,
-	WALLET_CONNECT,
+  CHAIN_DATA,
+  HTTP_PROVIDER,
+  LOADERS,
+  XDC_PAY,
+  WALLET_CONNECT,
 } from "../helpers/constant";
 
 import * as actions from "../actions";
@@ -77,21 +77,20 @@ export async function initXdc3() {
       return store.dispatch(actions.WalletDisconnected());
     }
 
-    if (currentProvider !== "xinpay") {
-      toast(
-        <div>
-          XDCPay not available in the browser. Please refer{" "}
-          <a href="https://chrome.google.com/webstore/detail/xdcpay/bocpokimicclpaiekenaeelehdjllofo?hl=en">
-            here
-          </a>
-        </div>,
-        {
-          autoClose: false,
-        }
-      );
-
-      return store.dispatch(actions.WalletDisconnected());
-    }
+      if (currentProvider !== "xinpay") {
+        toast(
+          <div>
+            XDCPay not available in the browser. Please refer{" "}
+            <a href="https://chrome.google.com/webstore/detail/xdcpay/bocpokimicclpaiekenaeelehdjllofo?hl=en">
+              here
+            </a>
+          </div>,
+          {
+            autoClose: false,
+          }
+        );
+        return store.dispatch(actions.WalletDisconnected());
+      }
 
     const isLocked = await WithTimeout(IsLocked, { timeout: 2000 });
     if (isLocked === true) {
@@ -113,7 +112,8 @@ export async function initXdc3() {
       );
       return store.dispatch(actions.WalletDisconnected());
     }
-    // const isConnected = await window.ethereum.isConnected();
+    const isConnected = await window.ethereum.isConnected();
+
     await window.ethereum.enable();
     _initListerner();
     const provider = await GetProvider();
@@ -124,15 +124,15 @@ export async function initXdc3() {
 
     localStorage.removeItem(WALLET_CONNECT);
     localStorage.setItem(
-			XDC_PAY,
-			JSON.stringify({
-				connected: true,
-				chain_id: chain_id,
-				address: accounts[0],
-				loader: LOADERS.Xinpay,
-				explorer: CHAIN_DATA[chain_id],
-			})
-		);
+      XDC_PAY,
+      JSON.stringify({
+        connected: true,
+        chain_id: chain_id,
+        address: accounts[0],
+        loader: LOADERS.Xinpay,
+        explorer: CHAIN_DATA[chain_id],
+      })
+    );
 
     return store.dispatch(
       actions.WalletConnected({
@@ -168,8 +168,7 @@ export function _initListerner() {
 
   if (addressChangeIntervalRef) clearInterval(addressChangeIntervalRef);
 
-  GetProvider()
-  .then((provider) => {
+  GetProvider().then((provider) => {
     xdc3 = new Xdc3(provider);
     addressChangeIntervalRef = setInterval(async () => {
       const accounts = await xdc3.eth.getAccounts();
@@ -241,7 +240,8 @@ export async function GetCurrentProvider() {
 
   if (window.web3.currentProvider.isMetaMask) {
     const chainId = await GetChainId();
-    if ([50, 51, 551].includes(chainId)) return "xinpay";
+    if ([1, 4, 421611, 137, 80001, 50, 51, 551].includes(chainId))
+			return "xinpay";
     return "metamask";
   }
 
@@ -405,7 +405,7 @@ export async function IsLocked() {
 
 export async function Disconnect() {
   const provider = await GetProvider();
-	xdc3 = new Xdc3(provider);
+  xdc3 = new Xdc3(provider);
   return xdc3.eth.currentProvider.disconnect;
 }
 
@@ -424,18 +424,18 @@ export function CheckWalletConnection() {
     );
   }
   const connectWalletConnector = JSON.parse(
-		localStorage.getItem(WALLET_CONNECT)
-	);
+    localStorage.getItem(WALLET_CONNECT)
+  );
   const xdcPayConnector = JSON.parse(localStorage.getItem(XDC_PAY));
 
   let CurrentWalletStatus = null;
 
   if (connectWalletConnector) {
     CurrentWalletStatus = connectWalletConnector;
-    CurrentWalletStatus.loader = 'wallet-connect';
+    CurrentWalletStatus.loader = "wallet-connect";
   } else if (xdcPayConnector) {
     CurrentWalletStatus = xdcPayConnector;
-	} else {
+  } else {
     return false;
   }
 
@@ -443,43 +443,45 @@ export function CheckWalletConnection() {
   console.log("CurrentWalletStatus: ", CurrentWalletStatus);
 
   return GetProvider()
-  .then((provider) => {
-    console.log("Provider", provider);
-    xdc3 = new Xdc3(provider);
-    xdc3.eth.getAccounts()
-    .then((accounts) => {
-      console.log("Accounts", accounts);
-        if (connectWalletConnector) {
-          xdc3.eth.getChainId()
-          .then((chain_id) => {
-						store.dispatch(
-							actions.WalletConnected({
-								address: CurrentWalletStatus.accounts[0],
-								chain_id: CurrentWalletStatus.chainId,
-								loader: CurrentWalletStatus.loader,
-								explorer: CHAIN_DATA[chain_id],
-							})
-						);
-					});
-          return true;
-        } else if (CurrentWalletStatus.address === accounts[0]) {
-					store.dispatch(
-						actions.WalletConnected({
-							address: CurrentWalletStatus.address,
-							chain_id: CurrentWalletStatus.chain_id,
-							loader: CurrentWalletStatus.loader,
-							explorer: CurrentWalletStatus.explorer,
-						})
-					);
-					return true;
-				} else {
-					store.dispatch(actions.WalletDisconnected());
-					return false;
-				}
-    }).catch(() => {
+    .then((provider) => {
+      console.log("Provider", provider);
+      xdc3 = new Xdc3(provider);
+      xdc3.eth
+        .getAccounts()
+        .then((accounts) => {
+          console.log("Accounts", accounts);
+          if (connectWalletConnector) {
+            xdc3.eth.getChainId().then((chain_id) => {
+              store.dispatch(
+                actions.WalletConnected({
+                  address: CurrentWalletStatus.accounts[0],
+                  chain_id: CurrentWalletStatus.chainId,
+                  loader: CurrentWalletStatus.loader,
+                  explorer: CHAIN_DATA[chain_id],
+                })
+              );
+            });
+            return true;
+          } else if (CurrentWalletStatus.address === accounts[0]) {
+            store.dispatch(
+              actions.WalletConnected({
+                address: CurrentWalletStatus.address,
+                chain_id: CurrentWalletStatus.chain_id,
+                loader: CurrentWalletStatus.loader,
+                explorer: CurrentWalletStatus.explorer,
+              })
+            );
+            return true;
+          } else {
+            store.dispatch(actions.WalletDisconnected());
+            return false;
+          }
+        })
+        .catch(() => {
+          return false;
+        });
+    })
+    .catch(() => {
       return false;
     });
-  }).catch(() => {
-    return false;
-  });
 }
