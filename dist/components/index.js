@@ -147,7 +147,7 @@ var removeEthereumListener = function removeEthereumListener() {
 exports.removeEthereumListener = removeEthereumListener;
 
 var switchNetwork = function switchNetwork(chaindId) {
-  Wallet.switchNetwork(chaindId);
+  _walletConnect.default.switchNetwork(chaindId);
 };
 
 exports.switchNetwork = switchNetwork;

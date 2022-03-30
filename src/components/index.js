@@ -103,5 +103,5 @@ export const removeEthereumListener = () => {
 };
 
 export const switchNetwork = (chaindId) => {
-  Wallet.switchNetwork(chaindId);
+  WalletConnect.switchNetwork(chaindId);
 };
