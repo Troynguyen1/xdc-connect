@@ -148,21 +148,55 @@ export function _initListerner() {
   });
 }
 
-export async function switchNetwork(chainId) {
-  connector
+export async function switchToXDCNetwork(chainId) {
+  console.log("baseConnector", connector);
+
+  if (connector === undefined) {
+    const _connector = new NodeWalletConnect(
+      {
+        bridge: "https://bridge.walletconnect.org", // Required
+      },
+      {
+        clientMeta: {
+          description: "WalletConnect NodeJS Client",
+          url: "https://nodejs.org/en/",
+          icons: ["https://nodejs.org/static/images/logo.svg"],
+          name: "WalletConnect",
+        },
+      }
+    );
+    try {
+      await addXDCTestNetwork(_connector);
+      await switchNetwork(_connector, chainId);
+      store.dispatch(actions.NetworkChanged(chainId));
+    } catch {
+    }
+  } else {
+    try {
+			await addXDCTestNetwork(connector);
+			await switchNetwork(connector, chainId);
+      store.dispatch(actions.NetworkChanged(chainId));
+		} catch {
+		}
+  }
+}
+
+
+export async function switchNetwork(_connector, chainId) {
+	_connector
 		.sendCustomRequest({
 			id: 1,
 			jsonrpc: "2.0",
 			method: "wallet_switchEthereumChain",
 			params: [
 				{
-					chainId: "0x5",
+					chainId: chainId,
 				},
 			],
 		})
-		.then(async(res) => {
+		.then(async (res) => {
 			console.log("Response", res);
-      toast.success("Network switched!", {
+			toast.success("Network switched!", {
 				autoClose: 5000,
 				hideProgressBar: true,
 				closeOnClick: true,
@@ -171,14 +205,64 @@ export async function switchNetwork(chainId) {
 		})
 		.catch((err) => {
 			console.log("Error", err);
-      // toast.error("Can not switch to the selected network! Please try to manually switch your network from the wallet extension", {
-			// 	autoClose: 5000,
-			// 	hideProgressBar: true,
-			// 	closeOnClick: true,
-			// 	progress: undefined,
-			// });
 		});
 };
+
+export async function addXDCnetwork(_connector) {
+    _connector
+			.sendCustomRequest({
+				id: 1,
+				jsonrpc: "2.0",
+				method: "wallet_addEthereumChain",
+				params: [
+					{
+						chainId: "0x32",
+						chainName: "Xinfin",
+						rpcUrls: ["https://xdcpayrpc.blocksscan.io/"],
+						nativeCurrency: {
+							name: "XDC",
+							symbol: "XDC",
+							decimals: 18,
+						},
+						blockExplorerUrls: ["https://observer.xdc.org"],
+					},
+				],
+			})
+			.then(async (res) => {
+				console.log("Response", res);
+			})
+			.catch((err) => {
+				console.log("Error", err);
+			});
+}
+
+export async function addXDCTestNetwork(_connector) {
+	_connector
+		.sendCustomRequest({
+			id: 1,
+			jsonrpc: "2.0",
+			method: "wallet_addEthereumChain",
+			params: [
+				{
+					chainId: "0x33",
+					chainName: "Xinfin",
+					rpcUrls: ["https://apothemxdcpayrpc.blocksscan.io/"],
+					nativeCurrency: {
+						name: "XDC",
+						symbol: "XDC",
+						decimals: 18,
+					},
+					blockExplorerUrls: ["https://explorer.apothem.network"],
+				},
+			],
+		})
+		.then(async (res) => {
+			console.log("Response", res);
+		})
+		.catch((err) => {
+			console.log("Error", err);
+		});
+}
 
 export async function SendTransaction(tx) {
   let to = tx["to"];

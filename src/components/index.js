@@ -103,6 +103,6 @@ export const removeEthereumListener = () => {
   Xinpay.removeEthereumListener();
 };
 
-export const switchNetwork = (chaindId) => {
-  WC.switchNetwork(chaindId);
+export const switchToXDCNetwork = (chaindId) => {
+	WC.switchToXDCNetwork(chaindId);
 };

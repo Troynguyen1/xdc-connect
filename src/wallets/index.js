@@ -7,7 +7,12 @@ import * as dcentInApp from "./dcentInAppBrowser";
 import * as walletConnect from "./walletConnect";
 
 import store from "../redux/store";
-import { LOADERS, DEFAULT_PROVIDER, XDC_PAY } from "../helpers/constant";
+import {
+	LOADERS,
+	DEFAULT_PROVIDER,
+	XDC_PAY,
+	WALLET_CONNECT,
+} from "../helpers/constant";
 import { BUILD_TX_LINK, IsJsonRpcError } from "../helpers/crypto";
 
 function GetFuncFromLoader(loader) {
@@ -135,6 +140,7 @@ export const CallTransaction = (tx) => {
 
 export const Disconnect = () => {
   localStorage.removeItem(XDC_PAY);
+  localStorage.removeItem(WALLET_CONNECT);
   xinpay.Disconnect();
   const loader = store.getState().wallet.loader;
   return GetFuncFromLoader(loader).Disconnect();

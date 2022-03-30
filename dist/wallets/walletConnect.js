@@ -11,9 +11,12 @@ exports.GetProvider = GetProvider;
 exports.IsWalletConnectSupported = IsWalletConnectSupported;
 exports.SendTransaction = SendTransaction;
 exports._initListerner = _initListerner;
+exports.addXDCTestNetwork = addXDCTestNetwork;
+exports.addXDCnetwork = addXDCnetwork;
 exports.checkConnection = checkConnection;
 exports.initWalletConnect = initWalletConnect;
 exports.switchNetwork = switchNetwork;
+exports.switchToXDCNetwork = switchToXDCNetwork;
 
 var _xdc = _interopRequireDefault(require("xdc3"));
 
@@ -254,28 +257,109 @@ function _initListerner() {
   });
 }
 
-function switchNetwork(_x) {
+function switchToXDCNetwork(_x) {
+  return _switchToXDCNetwork.apply(this, arguments);
+}
+
+function _switchToXDCNetwork() {
+  _switchToXDCNetwork = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(chainId) {
+    var _connector;
+
+    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            console.log("baseConnector", connector);
+
+            if (!(connector === undefined)) {
+              _context4.next = 15;
+              break;
+            }
+
+            _connector = new _node.default({
+              bridge: "https://bridge.walletconnect.org" // Required
+
+            }, {
+              clientMeta: {
+                description: "WalletConnect NodeJS Client",
+                url: "https://nodejs.org/en/",
+                icons: ["https://nodejs.org/static/images/logo.svg"],
+                name: "WalletConnect"
+              }
+            });
+            _context4.prev = 3;
+            _context4.next = 6;
+            return addXDCTestNetwork(_connector);
+
+          case 6:
+            _context4.next = 8;
+            return switchNetwork(_connector, chainId);
+
+          case 8:
+            _store.default.dispatch(actions.NetworkChanged(chainId));
+
+            _context4.next = 13;
+            break;
+
+          case 11:
+            _context4.prev = 11;
+            _context4.t0 = _context4["catch"](3);
+
+          case 13:
+            _context4.next = 25;
+            break;
+
+          case 15:
+            _context4.prev = 15;
+            _context4.next = 18;
+            return addXDCTestNetwork(connector);
+
+          case 18:
+            _context4.next = 20;
+            return switchNetwork(connector, chainId);
+
+          case 20:
+            _store.default.dispatch(actions.NetworkChanged(chainId));
+
+            _context4.next = 25;
+            break;
+
+          case 23:
+            _context4.prev = 23;
+            _context4.t1 = _context4["catch"](15);
+
+          case 25:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4, null, [[3, 11], [15, 23]]);
+  }));
+  return _switchToXDCNetwork.apply(this, arguments);
+}
+
+function switchNetwork(_x2, _x3) {
   return _switchNetwork.apply(this, arguments);
 }
 
 function _switchNetwork() {
-  _switchNetwork = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(chainId) {
-    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+  _switchNetwork = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(_connector, chainId) {
+    return regeneratorRuntime.wrap(function _callee6$(_context6) {
       while (1) {
-        switch (_context5.prev = _context5.next) {
+        switch (_context6.prev = _context6.next) {
           case 0:
-            connector.sendCustomRequest({
+            _connector.sendCustomRequest({
               id: 1,
               jsonrpc: "2.0",
               method: "wallet_switchEthereumChain",
               params: [{
-                chainId: "0x5"
+                chainId: chainId
               }]
             }).then( /*#__PURE__*/function () {
-              var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(res) {
-                return regeneratorRuntime.wrap(function _callee4$(_context4) {
+              var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(res) {
+                return regeneratorRuntime.wrap(function _callee5$(_context5) {
                   while (1) {
-                    switch (_context4.prev = _context4.next) {
+                    switch (_context5.prev = _context5.next) {
                       case 0:
                         console.log("Response", res);
 
@@ -288,77 +372,188 @@ function _switchNetwork() {
 
                       case 2:
                       case "end":
-                        return _context4.stop();
+                        return _context5.stop();
                     }
                   }
-                }, _callee4);
+                }, _callee5);
               }));
 
-              return function (_x3) {
+              return function (_x7) {
                 return _ref.apply(this, arguments);
               };
             }()).catch(function (err) {
-              console.log("Error", err); // toast.error("Can not switch to the selected network! Please try to manually switch your network from the wallet extension", {
-              // 	autoClose: 5000,
-              // 	hideProgressBar: true,
-              // 	closeOnClick: true,
-              // 	progress: undefined,
-              // });
+              console.log("Error", err);
             });
 
           case 1:
           case "end":
-            return _context5.stop();
+            return _context6.stop();
         }
       }
-    }, _callee5);
+    }, _callee6);
   }));
   return _switchNetwork.apply(this, arguments);
 }
 
 ;
 
-function SendTransaction(_x2) {
+function addXDCnetwork(_x4) {
+  return _addXDCnetwork.apply(this, arguments);
+}
+
+function _addXDCnetwork() {
+  _addXDCnetwork = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(_connector) {
+    return regeneratorRuntime.wrap(function _callee8$(_context8) {
+      while (1) {
+        switch (_context8.prev = _context8.next) {
+          case 0:
+            _connector.sendCustomRequest({
+              id: 1,
+              jsonrpc: "2.0",
+              method: "wallet_addEthereumChain",
+              params: [{
+                chainId: "0x32",
+                chainName: "Xinfin",
+                rpcUrls: ["https://xdcpayrpc.blocksscan.io/"],
+                nativeCurrency: {
+                  name: "XDC",
+                  symbol: "XDC",
+                  decimals: 18
+                },
+                blockExplorerUrls: ["https://observer.xdc.org"]
+              }]
+            }).then( /*#__PURE__*/function () {
+              var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(res) {
+                return regeneratorRuntime.wrap(function _callee7$(_context7) {
+                  while (1) {
+                    switch (_context7.prev = _context7.next) {
+                      case 0:
+                        console.log("Response", res);
+
+                      case 1:
+                      case "end":
+                        return _context7.stop();
+                    }
+                  }
+                }, _callee7);
+              }));
+
+              return function (_x8) {
+                return _ref2.apply(this, arguments);
+              };
+            }()).catch(function (err) {
+              console.log("Error", err);
+            });
+
+          case 1:
+          case "end":
+            return _context8.stop();
+        }
+      }
+    }, _callee8);
+  }));
+  return _addXDCnetwork.apply(this, arguments);
+}
+
+function addXDCTestNetwork(_x5) {
+  return _addXDCTestNetwork.apply(this, arguments);
+}
+
+function _addXDCTestNetwork() {
+  _addXDCTestNetwork = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(_connector) {
+    return regeneratorRuntime.wrap(function _callee10$(_context10) {
+      while (1) {
+        switch (_context10.prev = _context10.next) {
+          case 0:
+            _connector.sendCustomRequest({
+              id: 1,
+              jsonrpc: "2.0",
+              method: "wallet_addEthereumChain",
+              params: [{
+                chainId: "0x33",
+                chainName: "Xinfin",
+                rpcUrls: ["https://apothemxdcpayrpc.blocksscan.io/"],
+                nativeCurrency: {
+                  name: "XDC",
+                  symbol: "XDC",
+                  decimals: 18
+                },
+                blockExplorerUrls: ["https://explorer.apothem.network"]
+              }]
+            }).then( /*#__PURE__*/function () {
+              var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(res) {
+                return regeneratorRuntime.wrap(function _callee9$(_context9) {
+                  while (1) {
+                    switch (_context9.prev = _context9.next) {
+                      case 0:
+                        console.log("Response", res);
+
+                      case 1:
+                      case "end":
+                        return _context9.stop();
+                    }
+                  }
+                }, _callee9);
+              }));
+
+              return function (_x9) {
+                return _ref3.apply(this, arguments);
+              };
+            }()).catch(function (err) {
+              console.log("Error", err);
+            });
+
+          case 1:
+          case "end":
+            return _context10.stop();
+        }
+      }
+    }, _callee10);
+  }));
+  return _addXDCTestNetwork.apply(this, arguments);
+}
+
+function SendTransaction(_x6) {
   return _SendTransaction.apply(this, arguments);
 }
 
 function _SendTransaction() {
-  _SendTransaction = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(tx) {
+  _SendTransaction = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee13(tx) {
     var to;
-    return regeneratorRuntime.wrap(function _callee8$(_context8) {
+    return regeneratorRuntime.wrap(function _callee13$(_context13) {
       while (1) {
-        switch (_context8.prev = _context8.next) {
+        switch (_context13.prev = _context13.next) {
           case 0:
             to = tx["to"];
             to = "0x".concat(to.substring(3, to.length));
             tx["to"] = to;
             console.log(tx, "transaction");
-            return _context8.abrupt("return", new Promise(function (resolve, reject) {
+            return _context13.abrupt("return", new Promise(function (resolve, reject) {
               connector.sendTransaction(tx).then( /*#__PURE__*/function () {
-                var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(result) {
+                var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee12(result) {
                   var interval;
-                  return regeneratorRuntime.wrap(function _callee7$(_context7) {
+                  return regeneratorRuntime.wrap(function _callee12$(_context12) {
                     while (1) {
-                      switch (_context7.prev = _context7.next) {
+                      switch (_context12.prev = _context12.next) {
                         case 0:
                           try {
-                            interval = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
+                            interval = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11() {
                               var provider, xdc3, receipt;
-                              return regeneratorRuntime.wrap(function _callee6$(_context6) {
+                              return regeneratorRuntime.wrap(function _callee11$(_context11) {
                                 while (1) {
-                                  switch (_context6.prev = _context6.next) {
+                                  switch (_context11.prev = _context11.next) {
                                     case 0:
-                                      _context6.next = 2;
+                                      _context11.next = 2;
                                       return GetProvider();
 
                                     case 2:
-                                      provider = _context6.sent;
+                                      provider = _context11.sent;
                                       xdc3 = new _xdc.default(provider);
-                                      _context6.next = 6;
+                                      _context11.next = 6;
                                       return xdc3.eth.getTransactionReceipt(result);
 
                                     case 6:
-                                      receipt = _context6.sent;
+                                      receipt = _context11.sent;
 
                                       if (receipt && receipt.status) {
                                         resolve(receipt);
@@ -367,10 +562,10 @@ function _SendTransaction() {
 
                                     case 8:
                                     case "end":
-                                      return _context6.stop();
+                                      return _context11.stop();
                                   }
                                 }
-                              }, _callee6);
+                              }, _callee11);
                             })), 2000);
                           } catch (error) {
                             clearInterval(interval);
@@ -385,24 +580,24 @@ function _SendTransaction() {
 
                         case 2:
                         case "end":
-                          return _context7.stop();
+                          return _context12.stop();
                       }
                     }
-                  }, _callee7);
+                  }, _callee12);
                 }));
 
-                return function (_x4) {
-                  return _ref2.apply(this, arguments);
+                return function (_x10) {
+                  return _ref4.apply(this, arguments);
                 };
               }());
             }));
 
           case 5:
           case "end":
-            return _context8.stop();
+            return _context13.stop();
         }
       }
-    }, _callee8);
+    }, _callee13);
   }));
   return _SendTransaction.apply(this, arguments);
 }
@@ -412,25 +607,25 @@ function Disconnect() {
 }
 
 function _Disconnect() {
-  _Disconnect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
-    return regeneratorRuntime.wrap(function _callee9$(_context9) {
+  _Disconnect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee14() {
+    return regeneratorRuntime.wrap(function _callee14$(_context14) {
       while (1) {
-        switch (_context9.prev = _context9.next) {
+        switch (_context14.prev = _context14.next) {
           case 0:
             if (!connector) {
-              _context9.next = 3;
+              _context14.next = 3;
               break;
             }
 
-            _context9.next = 3;
+            _context14.next = 3;
             return connector.killSession();
 
           case 3:
           case "end":
-            return _context9.stop();
+            return _context14.stop();
         }
       }
-    }, _callee9);
+    }, _callee14);
   }));
   return _Disconnect.apply(this, arguments);
 }

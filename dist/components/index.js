@@ -5,7 +5,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.switchNetwork = exports.removeEthereumListener = exports._initListerner = exports.XdcConnect = exports.SetGasMultiplier = exports.SendTransaction = exports.GetWallet = exports.GetNativeBalance = exports.ForceShowModal = exports.ForceCloseModal = exports.Disconnect = exports.CheckWalletConnection = exports.CallTransaction = void 0;
+exports.switchToXDCNetwork = exports.removeEthereumListener = exports._initListerner = exports.XdcConnect = exports.SetGasMultiplier = exports.SendTransaction = exports.GetWallet = exports.GetNativeBalance = exports.ForceShowModal = exports.ForceCloseModal = exports.Disconnect = exports.CheckWalletConnection = exports.CallTransaction = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
@@ -148,8 +148,8 @@ var removeEthereumListener = function removeEthereumListener() {
 
 exports.removeEthereumListener = removeEthereumListener;
 
-var switchNetwork = function switchNetwork(chaindId) {
-  WC.switchNetwork(chaindId);
+var switchToXDCNetwork = function switchToXDCNetwork(chaindId) {
+  WC.switchToXDCNetwork(chaindId);
 };
 
-exports.switchNetwork = switchNetwork;
+exports.switchToXDCNetwork = switchToXDCNetwork;

@@ -932,7 +932,7 @@ function CheckWalletConnection() {
   var xdcPayConnector = JSON.parse(localStorage.getItem(_constant.XDC_PAY));
   var CurrentWalletStatus = null;
 
-  if (connectWalletConnector) {
+  if (connectWalletConnector !== undefined || connectWalletConnector !== null) {
     CurrentWalletStatus = connectWalletConnector;
     CurrentWalletStatus.loader = "wallet-connect";
   } else if (xdcPayConnector) {
