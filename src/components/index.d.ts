@@ -133,3 +133,5 @@ export function _initListerner(): void;
  *
  */
 export function removeEthereumEventListener(): any;
+
+export function switchNetwork(chainId: string): void;

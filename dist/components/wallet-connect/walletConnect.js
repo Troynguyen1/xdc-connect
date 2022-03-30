@@ -169,6 +169,9 @@ var WalletConnect = /*#__PURE__*/function (_React$Component) {
             })
           })]
         }), /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
+          className: "term-of-service",
+          children: "By connecting a wallet, you agree to Globiance's Terms of Service and acknowledge that you have read and understand our rules and regulations."
+        }), /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
           className: "modal-body",
           children: /*#__PURE__*/(0, _jsxRuntime.jsxs)("div", {
             className: "wallet-connect-block ".concat(displayType),

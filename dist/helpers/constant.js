@@ -13,9 +13,14 @@ var LOADERS = {
   WalletConnect: "wallet-connect"
 };
 exports.LOADERS = LOADERS;
-var VALID_CHAINS = [50, 51, 551];
+var VALID_CHAINS = [1, 4, 421611, 137, 80001, 50, 51, 551];
 exports.VALID_CHAINS = VALID_CHAINS;
 var NETWORK_NAME = {
+  1: "",
+  4: "",
+  421611: "",
+  137: "",
+  80001: "",
   50: "XinFin",
   51: "Apothem",
   551: "XDC Devnet"

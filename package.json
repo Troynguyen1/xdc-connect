@@ -1,6 +1,6 @@
 {
   "name": "xdc-connect",
-  "version": "1.0.43",
+  "version": "1.0.44",
   "main": "dist/components/index.js",
   "private": false,
   "files": [

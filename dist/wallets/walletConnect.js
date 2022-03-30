@@ -13,6 +13,7 @@ exports.SendTransaction = SendTransaction;
 exports._initListerner = _initListerner;
 exports.checkConnection = checkConnection;
 exports.initWalletConnect = initWalletConnect;
+exports.switchNetwork = switchNetwork;
 
 var _xdc = _interopRequireDefault(require("xdc3"));
 
@@ -143,6 +144,9 @@ function _initWalletConnect() {
             return connector.killSession();
 
           case 5:
+            GetProvider().then(function (res) {
+              console.log("provider", res);
+            });
             connector.createSession().then(function () {
               // get uri for QR Code modal
               var uri = connector.uri; // display QR Code modal
@@ -154,16 +158,16 @@ function _initWalletConnect() {
 
             _initListerner();
 
-            _context3.next = 17;
+            _context3.next = 18;
             break;
 
-          case 9:
-            _context3.prev = 9;
+          case 10:
+            _context3.prev = 10;
             _context3.t0 = _context3["catch"](0);
             console.log(_context3.t0);
 
             if (!(_context3.t0 === "timeout")) {
-              _context3.next = 15;
+              _context3.next = 16;
               break;
             }
 
@@ -174,7 +178,7 @@ function _initWalletConnect() {
             });
             return _context3.abrupt("return", _store.default.dispatch(actions.WalletDisconnected()));
 
-          case 15:
+          case 16:
             (0, _reactToastify.toast)( /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
               children: "Error while connecting to WalletConnect provider"
             }), {
@@ -182,12 +186,12 @@ function _initWalletConnect() {
             });
             return _context3.abrupt("return", _store.default.dispatch(actions.WalletDisconnected()));
 
-          case 17:
+          case 18:
           case "end":
             return _context3.stop();
         }
       }
-    }, _callee3, null, [[0, 9]]);
+    }, _callee3, null, [[0, 10]]);
   }));
   return _initWalletConnect.apply(this, arguments);
 }
@@ -250,47 +254,96 @@ function _initListerner() {
   });
 }
 
-function SendTransaction(_x) {
+function switchNetwork(_x) {
+  return _switchNetwork.apply(this, arguments);
+}
+
+function _switchNetwork() {
+  _switchNetwork = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(chainId) {
+    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            connector.sendCustomRequest({
+              id: 1,
+              jsonrpc: "2.0",
+              method: "wallet_switchEthereumChain",
+              params: [{
+                chainId: chainId
+              }]
+            }).then(function (res) {
+              console.log("Response", res);
+
+              _reactToastify.toast.success("Network switched!", {
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                progress: undefined
+              });
+            }).catch(function (err) {
+              console.log("Error", err);
+
+              _reactToastify.toast.error("Can not switch to the selected network! Please try to manually switch your network from the wallet extension", {
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                progress: undefined
+              });
+            });
+
+          case 1:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4);
+  }));
+  return _switchNetwork.apply(this, arguments);
+}
+
+;
+
+function SendTransaction(_x2) {
   return _SendTransaction.apply(this, arguments);
 }
 
 function _SendTransaction() {
-  _SendTransaction = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(tx) {
+  _SendTransaction = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(tx) {
     var to;
-    return regeneratorRuntime.wrap(function _callee6$(_context6) {
+    return regeneratorRuntime.wrap(function _callee7$(_context7) {
       while (1) {
-        switch (_context6.prev = _context6.next) {
+        switch (_context7.prev = _context7.next) {
           case 0:
             to = tx["to"];
             to = "0x".concat(to.substring(3, to.length));
             tx["to"] = to;
             console.log(tx, "transaction");
-            return _context6.abrupt("return", new Promise(function (resolve, reject) {
+            return _context7.abrupt("return", new Promise(function (resolve, reject) {
               connector.sendTransaction(tx).then( /*#__PURE__*/function () {
-                var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(result) {
+                var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(result) {
                   var interval;
-                  return regeneratorRuntime.wrap(function _callee5$(_context5) {
+                  return regeneratorRuntime.wrap(function _callee6$(_context6) {
                     while (1) {
-                      switch (_context5.prev = _context5.next) {
+                      switch (_context6.prev = _context6.next) {
                         case 0:
                           try {
-                            interval = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
+                            interval = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
                               var provider, xdc3, receipt;
-                              return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                              return regeneratorRuntime.wrap(function _callee5$(_context5) {
                                 while (1) {
-                                  switch (_context4.prev = _context4.next) {
+                                  switch (_context5.prev = _context5.next) {
                                     case 0:
-                                      _context4.next = 2;
+                                      _context5.next = 2;
                                       return GetProvider();
 
                                     case 2:
-                                      provider = _context4.sent;
+                                      provider = _context5.sent;
                                       xdc3 = new _xdc.default(provider);
-                                      _context4.next = 6;
+                                      _context5.next = 6;
                                       return xdc3.eth.getTransactionReceipt(result);
 
                                     case 6:
-                                      receipt = _context4.sent;
+                                      receipt = _context5.sent;
 
                                       if (receipt && receipt.status) {
                                         resolve(receipt);
@@ -299,10 +352,10 @@ function _SendTransaction() {
 
                                     case 8:
                                     case "end":
-                                      return _context4.stop();
+                                      return _context5.stop();
                                   }
                                 }
-                              }, _callee4);
+                              }, _callee5);
                             })), 2000);
                           } catch (error) {
                             clearInterval(interval);
@@ -317,13 +370,13 @@ function _SendTransaction() {
 
                         case 2:
                         case "end":
-                          return _context5.stop();
+                          return _context6.stop();
                       }
                     }
-                  }, _callee5);
+                  }, _callee6);
                 }));
 
-                return function (_x2) {
+                return function (_x3) {
                   return _ref.apply(this, arguments);
                 };
               }());
@@ -331,10 +384,10 @@ function _SendTransaction() {
 
           case 5:
           case "end":
-            return _context6.stop();
+            return _context7.stop();
         }
       }
-    }, _callee6);
+    }, _callee7);
   }));
   return _SendTransaction.apply(this, arguments);
 }
@@ -344,25 +397,25 @@ function Disconnect() {
 }
 
 function _Disconnect() {
-  _Disconnect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
-    return regeneratorRuntime.wrap(function _callee7$(_context7) {
+  _Disconnect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+    return regeneratorRuntime.wrap(function _callee8$(_context8) {
       while (1) {
-        switch (_context7.prev = _context7.next) {
+        switch (_context8.prev = _context8.next) {
           case 0:
             if (!connector) {
-              _context7.next = 3;
+              _context8.next = 3;
               break;
             }
 
-            _context7.next = 3;
+            _context8.next = 3;
             return connector.killSession();
 
           case 3:
           case "end":
-            return _context7.stop();
+            return _context8.stop();
         }
       }
-    }, _callee7);
+    }, _callee8);
   }));
   return _Disconnect.apply(this, arguments);
 }

@@ -19,6 +19,7 @@ import { RemoveExpo } from "../helpers/math";
 import NodeWalletConnect from "@walletconnect/node";
 import WalletConnectQRCodeModal from "@walletconnect/qrcode-modal";
 
+
 let addresses, connector, addressChangeIntervalRef;
 
 export function IsWalletConnectSupported() {
@@ -55,6 +56,9 @@ export async function initWalletConnect() {
       if(connector.session.connected) {
         await connector.killSession();
       }
+      GetProvider().then((res) => {
+        console.log("provider", res);
+      });
       connector.createSession().then(() => {
         // get uri for QR Code modal
         const uri = connector.uri;
@@ -102,10 +106,9 @@ export function _initListerner() {
     if (error) {
       throw error;
     }
-  
+
     // Close QR Code Modal
     WalletConnectQRCodeModal.close();
-  
     // Get provided accounts and chainId
     const { accounts, chainId } = payload.params[0];
     addresses = accounts;
@@ -145,8 +148,39 @@ export function _initListerner() {
   });
 }
 
+export async function switchNetwork(chainId) {
+  connector
+		.sendCustomRequest({
+			id: 1,
+			jsonrpc: "2.0",
+			method: "wallet_switchEthereumChain",
+			params: [
+				{
+					chainId: chainId,
+				},
+			],
+		})
+		.then((res) => {
+			console.log("Response", res);
+      toast.success("Network switched!", {
+				autoClose: 5000,
+				hideProgressBar: true,
+				closeOnClick: true,
+				progress: undefined,
+			});
+		})
+		.catch((err) => {
+			console.log("Error", err);
+      toast.error("Can not switch to the selected network! Please try to manually switch your network from the wallet extension", {
+				autoClose: 5000,
+				hideProgressBar: true,
+				closeOnClick: true,
+				progress: undefined,
+			});
+		});
+};
+
 export async function SendTransaction(tx) {
-  
   let to = tx["to"];
   to = "0x".concat(to.substring(3, to.length))
   tx["to"] = to;

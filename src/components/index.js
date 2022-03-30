@@ -101,3 +101,7 @@ export const _initListerner = () => {
 export const removeEthereumListener = () => {
   Xinpay.removeEthereumListener();
 };
+
+export const switchNetwork = (chaindId) => {
+  Wallet.switchNetwork(chaindId);
+};
