@@ -156,11 +156,11 @@ export async function switchNetwork(chainId) {
 			method: "wallet_switchEthereumChain",
 			params: [
 				{
-					chainId: chainId,
+					chainId: "0x5",
 				},
 			],
 		})
-		.then((res) => {
+		.then(async(res) => {
 			console.log("Response", res);
       toast.success("Network switched!", {
 				autoClose: 5000,
@@ -171,12 +171,12 @@ export async function switchNetwork(chainId) {
 		})
 		.catch((err) => {
 			console.log("Error", err);
-      toast.error("Can not switch to the selected network! Please try to manually switch your network from the wallet extension", {
-				autoClose: 5000,
-				hideProgressBar: true,
-				closeOnClick: true,
-				progress: undefined,
-			});
+      // toast.error("Can not switch to the selected network! Please try to manually switch your network from the wallet extension", {
+			// 	autoClose: 5000,
+			// 	hideProgressBar: true,
+			// 	closeOnClick: true,
+			// 	progress: undefined,
+			// });
 		});
 };
 
@@ -193,7 +193,7 @@ export async function SendTransaction(tx) {
           try {
             interval = setInterval(async () => {
               const provider = await GetProvider();
-              const xdc3 = new Xdc3(provider); 
+              const xdc3 = new Xdc3(provider);
               const receipt = await xdc3.eth.getTransactionReceipt(result);
               if(receipt && receipt.status) {
                 resolve(receipt);

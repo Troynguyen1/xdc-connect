@@ -259,44 +259,59 @@ function switchNetwork(_x) {
 }
 
 function _switchNetwork() {
-  _switchNetwork = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(chainId) {
-    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+  _switchNetwork = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(chainId) {
+    return regeneratorRuntime.wrap(function _callee5$(_context5) {
       while (1) {
-        switch (_context4.prev = _context4.next) {
+        switch (_context5.prev = _context5.next) {
           case 0:
             connector.sendCustomRequest({
               id: 1,
               jsonrpc: "2.0",
               method: "wallet_switchEthereumChain",
               params: [{
-                chainId: chainId
+                chainId: "0x5"
               }]
-            }).then(function (res) {
-              console.log("Response", res);
+            }).then( /*#__PURE__*/function () {
+              var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(res) {
+                return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                  while (1) {
+                    switch (_context4.prev = _context4.next) {
+                      case 0:
+                        console.log("Response", res);
 
-              _reactToastify.toast.success("Network switched!", {
-                autoClose: 5000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                progress: undefined
-              });
-            }).catch(function (err) {
-              console.log("Error", err);
+                        _reactToastify.toast.success("Network switched!", {
+                          autoClose: 5000,
+                          hideProgressBar: true,
+                          closeOnClick: true,
+                          progress: undefined
+                        });
 
-              _reactToastify.toast.error("Can not switch to the selected network! Please try to manually switch your network from the wallet extension", {
-                autoClose: 5000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                progress: undefined
-              });
+                      case 2:
+                      case "end":
+                        return _context4.stop();
+                    }
+                  }
+                }, _callee4);
+              }));
+
+              return function (_x3) {
+                return _ref.apply(this, arguments);
+              };
+            }()).catch(function (err) {
+              console.log("Error", err); // toast.error("Can not switch to the selected network! Please try to manually switch your network from the wallet extension", {
+              // 	autoClose: 5000,
+              // 	hideProgressBar: true,
+              // 	closeOnClick: true,
+              // 	progress: undefined,
+              // });
             });
 
           case 1:
           case "end":
-            return _context4.stop();
+            return _context5.stop();
         }
       }
-    }, _callee4);
+    }, _callee5);
   }));
   return _switchNetwork.apply(this, arguments);
 }
@@ -308,42 +323,42 @@ function SendTransaction(_x2) {
 }
 
 function _SendTransaction() {
-  _SendTransaction = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(tx) {
+  _SendTransaction = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(tx) {
     var to;
-    return regeneratorRuntime.wrap(function _callee7$(_context7) {
+    return regeneratorRuntime.wrap(function _callee8$(_context8) {
       while (1) {
-        switch (_context7.prev = _context7.next) {
+        switch (_context8.prev = _context8.next) {
           case 0:
             to = tx["to"];
             to = "0x".concat(to.substring(3, to.length));
             tx["to"] = to;
             console.log(tx, "transaction");
-            return _context7.abrupt("return", new Promise(function (resolve, reject) {
+            return _context8.abrupt("return", new Promise(function (resolve, reject) {
               connector.sendTransaction(tx).then( /*#__PURE__*/function () {
-                var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(result) {
+                var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(result) {
                   var interval;
-                  return regeneratorRuntime.wrap(function _callee6$(_context6) {
+                  return regeneratorRuntime.wrap(function _callee7$(_context7) {
                     while (1) {
-                      switch (_context6.prev = _context6.next) {
+                      switch (_context7.prev = _context7.next) {
                         case 0:
                           try {
-                            interval = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+                            interval = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
                               var provider, xdc3, receipt;
-                              return regeneratorRuntime.wrap(function _callee5$(_context5) {
+                              return regeneratorRuntime.wrap(function _callee6$(_context6) {
                                 while (1) {
-                                  switch (_context5.prev = _context5.next) {
+                                  switch (_context6.prev = _context6.next) {
                                     case 0:
-                                      _context5.next = 2;
+                                      _context6.next = 2;
                                       return GetProvider();
 
                                     case 2:
-                                      provider = _context5.sent;
+                                      provider = _context6.sent;
                                       xdc3 = new _xdc.default(provider);
-                                      _context5.next = 6;
+                                      _context6.next = 6;
                                       return xdc3.eth.getTransactionReceipt(result);
 
                                     case 6:
-                                      receipt = _context5.sent;
+                                      receipt = _context6.sent;
 
                                       if (receipt && receipt.status) {
                                         resolve(receipt);
@@ -352,10 +367,10 @@ function _SendTransaction() {
 
                                     case 8:
                                     case "end":
-                                      return _context5.stop();
+                                      return _context6.stop();
                                   }
                                 }
-                              }, _callee5);
+                              }, _callee6);
                             })), 2000);
                           } catch (error) {
                             clearInterval(interval);
@@ -370,24 +385,24 @@ function _SendTransaction() {
 
                         case 2:
                         case "end":
-                          return _context6.stop();
+                          return _context7.stop();
                       }
                     }
-                  }, _callee6);
+                  }, _callee7);
                 }));
 
-                return function (_x3) {
-                  return _ref.apply(this, arguments);
+                return function (_x4) {
+                  return _ref2.apply(this, arguments);
                 };
               }());
             }));
 
           case 5:
           case "end":
-            return _context7.stop();
+            return _context8.stop();
         }
       }
-    }, _callee7);
+    }, _callee8);
   }));
   return _SendTransaction.apply(this, arguments);
 }
@@ -397,25 +412,25 @@ function Disconnect() {
 }
 
 function _Disconnect() {
-  _Disconnect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
-    return regeneratorRuntime.wrap(function _callee8$(_context8) {
+  _Disconnect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
+    return regeneratorRuntime.wrap(function _callee9$(_context9) {
       while (1) {
-        switch (_context8.prev = _context8.next) {
+        switch (_context9.prev = _context9.next) {
           case 0:
             if (!connector) {
-              _context8.next = 3;
+              _context9.next = 3;
               break;
             }
 
-            _context8.next = 3;
+            _context9.next = 3;
             return connector.killSession();
 
           case 3:
           case "end":
-            return _context8.stop();
+            return _context9.stop();
         }
       }
-    }, _callee8);
+    }, _callee9);
   }));
   return _Disconnect.apply(this, arguments);
 }
