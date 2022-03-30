@@ -25,6 +25,8 @@ var actions = _interopRequireWildcard(require("../actions/index"));
 
 var Xinpay = _interopRequireWildcard(require("../wallets/xinpay"));
 
+var WC = _interopRequireWildcard(require("../wallets/walletConnect"));
+
 require("../assets/scss/main.scss");
 
 require("react-toastify/dist/ReactToastify.css");
@@ -147,7 +149,7 @@ var removeEthereumListener = function removeEthereumListener() {
 exports.removeEthereumListener = removeEthereumListener;
 
 var switchNetwork = function switchNetwork(chaindId) {
-  _walletConnect.default.switchNetwork(chaindId);
+  WC.switchNetwork(chaindId);
 };
 
 exports.switchNetwork = switchNetwork;

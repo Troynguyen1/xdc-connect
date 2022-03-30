@@ -9,6 +9,7 @@ import store from "../redux/store";
 import * as Wallet from "../wallets";
 import * as actions from "../actions/index";
 import * as Xinpay from "../wallets/xinpay";
+import * as WC from "../wallets/walletConnect";
 
 import "../assets/scss/main.scss";
 import "react-toastify/dist/ReactToastify.css";
@@ -103,5 +104,5 @@ export const removeEthereumListener = () => {
 };
 
 export const switchNetwork = (chaindId) => {
-  WalletConnect.switchNetwork(chaindId);
+  WC.switchNetwork(chaindId);
 };
