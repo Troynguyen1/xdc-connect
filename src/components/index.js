@@ -8,6 +8,7 @@ import WalletConnect from "./wallet-connect/walletConnect";
 import store from "../redux/store";
 import * as Wallet from "../wallets";
 import * as actions from "../actions/index";
+import * as Xinpay from "../wallets/xinpay";
 
 import "../assets/scss/main.scss";
 import "react-toastify/dist/ReactToastify.css";
@@ -70,6 +71,7 @@ export const CallTransaction = (tx) => {
 
 export const Disconnect = () => {
   store.dispatch(actions.WalletDisconnected());
+  Wallet.Disconnect();
 };
 
 export const ForceShowModal = () => {
@@ -86,4 +88,16 @@ export const SetGasMultiplier = (gasMultiplier) => {
 
 export const GetNativeBalance = () => {
   return Wallet.GetNativeBalance();
+};
+
+export const CheckWalletConnection = () => {
+  return Xinpay.CheckWalletConnection();
+};
+
+export const _initListerner = () => {
+  Xinpay._initListerner();
+};
+
+export const removeEthereumListener = () => {
+  Xinpay.removeEthereumListener();
 };

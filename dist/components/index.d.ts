@@ -30,7 +30,8 @@ export type ValidProvider =
   | "xinpay"
   | "keystore"
   | "privatekey"
-  | "dcent-inapp";
+  | "dcent-inapp"
+  | "wallet-connect";
 
 export type DisplayType = "grid" | "row";
 
@@ -52,7 +53,7 @@ export interface WalletConnectProps {
   toastContainer?: any;
   rpcProvider?: string;
   wsProvider?: string;
-  gasMultiplier: ?number;
+  gasMultiplier?: number;
 }
 
 export class XdcConnect extends React.Component<WalletConnectProps, any> {}
@@ -114,3 +115,21 @@ export function ForceCloseModal(): void;
  *
  */
 export function SetGasMultiplier(gasMultiplier: number): void;
+
+/**
+ * API to update default chain id
+ *
+ */
+export function CheckWalletConnection(): boolean;
+
+/**
+ * API to init Ethereum event listener
+ *
+ */
+export function _initListerner(): void;
+
+/**
+ * API to remove Ethereum event listener
+ *
+ */
+export function removeEthereumEventListener(): any;

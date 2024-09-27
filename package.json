@@ -1,6 +1,6 @@
 {
   "name": "xdc-connect",
-  "version": "1.0.42",
+  "version": "1.0.43",
   "main": "dist/components/index.js",
   "private": false,
   "files": [
@@ -13,6 +13,11 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@walletconnect/node": "^1.0.0",
+    "@walletconnect/qrcode-modal": "^1.7.1",
+    "@walletconnect/web3-provider": "^1.7.1",
+    "jshint": "^2.13.4",
+    "jslint": "^0.12.1",
     "lodash": "^4.17.21",
     "node-sass": "^6.0.1",
     "react": "^17.0.2",
@@ -80,6 +85,7 @@
     "@storybook/node-logger": "^6.3.4",
     "@storybook/preset-create-react-app": "^3.2.0",
     "@storybook/react": "^6.3.4",
+    "@types/react": "^17.0.39",
     "cross-env": "^7.0.3"
   },
   "repository": {

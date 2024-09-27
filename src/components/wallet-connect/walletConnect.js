@@ -6,9 +6,11 @@ import { toast } from "react-toastify";
 import Keystore from "./Keystore";
 import PrivateKey from "./PrivateKey";
 import { initXdc3 } from "../../wallets/xinpay";
+import { initWalletConnect } from "../../wallets/walletConnect";
 import { initDcent } from "../../wallets/dcentInAppBrowser";
 
 import XinpayLogo from "../../assets/img/wallets/xinpay-logo.png";
+import WalletConnectLogo from "../../assets/img/wallets/walletConnect-logo.png";
 import PrivateKeyLogo from "../../assets/img/wallets/privatekey-logo.png";
 import KeystoreLogo from "../../assets/img/wallets/keystore-logo.png";
 import DcentLogo from "../../assets/img/wallets/dcent-logo.png";
@@ -135,6 +137,19 @@ class WalletConnect extends React.Component {
                   </div>
                   <div className="wallet-icon">
                     <img src={XinpayLogo} alt="Icon" />
+                  </div>
+                </button>
+              ) : (
+                ""
+              )}
+
+              {this.enabledProviders.includes(LOADERS.WalletConnect) ? (
+                <button onClick={initWalletConnect} className="wallect-connect-btn">
+                  <div className="wallet-name">
+                    <h4>WalletConnect</h4>
+                  </div>
+                  <div className="wallet-icon">
+                    <img src={WalletConnectLogo} alt="Icon" />
                   </div>
                 </button>
               ) : (

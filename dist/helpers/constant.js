@@ -3,13 +3,14 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.VALID_CHAINS = exports.NETWORK_NAME = exports.LOADERS = exports.HTTP_PROVIDER = exports.EXPLORER = exports.DEFAULT_PROVIDER = exports.DEFAULT_CHAIN_ID = exports.CHAIN_DATA = void 0;
+exports.XDC_PAY = exports.WALLET_CONNECT = exports.VALID_CHAINS = exports.NETWORK_NAME = exports.LOADERS = exports.HTTP_PROVIDER = exports.EXPLORER = exports.DEFAULT_PROVIDER = exports.DEFAULT_CHAIN_ID = exports.CHAIN_DATA = void 0;
 var LOADERS = {
   Xinpay: "xinpay",
   Keystore: "keystore",
   Privatekey: "privatekey",
   MetaMask: "metamask",
-  DcentInApp: "dcent-inapp"
+  DcentInApp: "dcent-inapp",
+  WalletConnect: "wallet-connect"
 };
 exports.LOADERS = LOADERS;
 var VALID_CHAINS = [50, 51, 551];
@@ -41,3 +42,7 @@ var DEFAULT_PROVIDER = HTTP_PROVIDER[VALID_CHAINS[0]];
 exports.DEFAULT_PROVIDER = DEFAULT_PROVIDER;
 var EXPLORER = CHAIN_DATA[DEFAULT_CHAIN_ID];
 exports.EXPLORER = EXPLORER;
+var XDC_PAY = "xdc_pay";
+exports.XDC_PAY = XDC_PAY;
+var WALLET_CONNECT = "walletconnect";
+exports.WALLET_CONNECT = WALLET_CONNECT;

@@ -1,11 +1,11 @@
 "use strict";
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.CallTransaction = void 0;
+exports.Disconnect = exports.CallTransaction = void 0;
 exports.GetNativeBalance = GetNativeBalance;
 exports.SendTransaction = void 0;
 
@@ -18,6 +18,8 @@ var xinpay = _interopRequireWildcard(require("./xinpay"));
 var account = _interopRequireWildcard(require("./account"));
 
 var dcentInApp = _interopRequireWildcard(require("./dcentInAppBrowser"));
+
+var walletConnect = _interopRequireWildcard(require("./walletConnect"));
 
 var _store = _interopRequireDefault(require("../redux/store"));
 
@@ -46,6 +48,9 @@ function GetFuncFromLoader(loader) {
 
     case _constant.LOADERS.DcentInApp:
       return dcentInApp;
+
+    case _constant.LOADERS.WalletConnect:
+      return walletConnect;
 
     default:
       return xinpay;
@@ -158,3 +163,14 @@ var CallTransaction = function CallTransaction(tx) {
 };
 
 exports.CallTransaction = CallTransaction;
+
+var Disconnect = function Disconnect() {
+  localStorage.removeItem(_constant.XDC_PAY);
+  xinpay.Disconnect();
+
+  var loader = _store.default.getState().wallet.loader;
+
+  return GetFuncFromLoader(loader).Disconnect();
+};
+
+exports.Disconnect = Disconnect;

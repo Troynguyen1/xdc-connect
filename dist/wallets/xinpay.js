@@ -1,12 +1,14 @@
 "use strict";
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.ApothemProvider = void 0;
 exports.CallTransaction = CallTransaction;
+exports.CheckWalletConnection = CheckWalletConnection;
+exports.Disconnect = Disconnect;
 exports.GetChainId = GetChainId;
 exports.GetCurrentProvider = GetCurrentProvider;
 exports.GetNativeBalance = void 0;
@@ -17,6 +19,7 @@ exports.MainnetProvider = void 0;
 exports.SendTransaction = SendTransaction;
 exports._initListerner = _initListerner;
 exports.initXdc3 = initXdc3;
+exports.removeEthereumListener = removeEthereumListener;
 
 var _xdc = _interopRequireDefault(require("xdc3"));
 
@@ -46,9 +49,9 @@ function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && 
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -267,6 +270,14 @@ function _initXdc() {
 
           case 38:
             chain_id = _context7.sent;
+            localStorage.removeItem(_constant.WALLET_CONNECT);
+            localStorage.setItem(_constant.XDC_PAY, JSON.stringify({
+              connected: true,
+              chain_id: chain_id,
+              address: accounts[0],
+              loader: _constant.LOADERS.Xinpay,
+              explorer: _constant.CHAIN_DATA[chain_id]
+            }));
             return _context7.abrupt("return", _store.default.dispatch(actions.WalletConnected({
               address: accounts[0],
               chain_id: chain_id,
@@ -274,12 +285,12 @@ function _initXdc() {
               explorer: _constant.CHAIN_DATA[chain_id]
             })));
 
-          case 42:
-            _context7.prev = 42;
+          case 44:
+            _context7.prev = 44;
             _context7.t1 = _context7["catch"](0);
 
             if (!(_context7.t1 === "timeout")) {
-              _context7.next = 47;
+              _context7.next = 49;
               break;
             }
 
@@ -290,7 +301,7 @@ function _initXdc() {
             });
             return _context7.abrupt("return", _store.default.dispatch(actions.WalletDisconnected()));
 
-          case 47:
+          case 49:
             (0, _reactToastify.toast)( /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
               children: "Error while connecting to XDCPay provider"
             }), {
@@ -298,12 +309,12 @@ function _initXdc() {
             });
             return _context7.abrupt("return", _store.default.dispatch(actions.WalletDisconnected()));
 
-          case 49:
+          case 51:
           case "end":
             return _context7.stop();
         }
       }
-    }, _callee7, null, [[0, 42]]);
+    }, _callee7, null, [[0, 44]]);
   }));
   return _initXdc.apply(this, arguments);
 }
@@ -311,38 +322,41 @@ function _initXdc() {
 function _initListerner() {
   window.ethereum.removeAllListeners();
   if (addressChangeIntervalRef) clearInterval(addressChangeIntervalRef);
-  addressChangeIntervalRef = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-    var accounts;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.next = 2;
-            return xdc3.eth.getAccounts();
+  GetProvider().then(function (provider) {
+    xdc3 = new _xdc.default(provider);
+    addressChangeIntervalRef = setInterval( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+      var accounts;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return xdc3.eth.getAccounts();
 
-          case 2:
-            accounts = _context.sent;
+            case 2:
+              accounts = _context.sent;
 
-            if (!_lodash.default.isEqual(accounts, addresses)) {
-              _context.next = 5;
-              break;
-            }
+              if (!_lodash.default.isEqual(accounts, addresses)) {
+                _context.next = 5;
+                break;
+              }
 
-            return _context.abrupt("return");
+              return _context.abrupt("return");
 
-          case 5:
-            console.log("accounts", accounts);
-            addresses = accounts;
+            case 5:
+              console.log("accounts", accounts);
+              addresses = accounts;
 
-            _store.default.dispatch(actions.AccountChanged(accounts[0]));
+              _store.default.dispatch(actions.AccountChanged(accounts[0]));
 
-          case 8:
-          case "end":
-            return _context.stop();
+            case 8:
+            case "end":
+              return _context.stop();
+          }
         }
-      }
-    }, _callee);
-  })), 1000);
+      }, _callee);
+    })), 1000);
+  });
   window.ethereum.on("accountsChanged", /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(data) {
       var accounts;
@@ -355,12 +369,11 @@ function _initListerner() {
 
             case 2:
               accounts = _context2.sent;
-              console.log("accounts", accounts);
               addresses = accounts;
 
               _store.default.dispatch(actions.AccountChanged(accounts[0]));
 
-            case 6:
+            case 5:
             case "end":
               return _context2.stop();
           }
@@ -445,11 +458,28 @@ function _initListerner() {
   }());
   window.ethereum.on("disconnect", function (data) {
     console.log("disconnect", data);
+    localStorage.removeItem(_constant.XDC_PAY);
     return _store.default.dispatch(actions.WalletDisconnected());
   });
   window.ethereum.on("message", function (data) {
     console.log("message", data);
   });
+}
+
+function removeEthereumListener() {
+  if (window.ethereum) {
+    return window.ethereum.removeAllListeners();
+  } else {
+    (0, _reactToastify.toast)( /*#__PURE__*/(0, _jsxRuntime.jsxs)("div", {
+      children: ["XDCPay not available in the browser. Please refer", " ", /*#__PURE__*/(0, _jsxRuntime.jsx)("a", {
+        href: "https://chrome.google.com/webstore/detail/xdcpay/bocpokimicclpaiekenaeelehdjllofo?hl=en",
+        children: "here"
+      })]
+    }), {
+      autoClose: false
+    });
+    return;
+  }
 }
 
 function GetCurrentProvider() {
@@ -849,4 +879,98 @@ function _IsLocked() {
     }, _callee14);
   }));
   return _IsLocked.apply(this, arguments);
+}
+
+function Disconnect() {
+  return _Disconnect.apply(this, arguments);
+}
+
+function _Disconnect() {
+  _Disconnect = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee15() {
+    var provider;
+    return regeneratorRuntime.wrap(function _callee15$(_context15) {
+      while (1) {
+        switch (_context15.prev = _context15.next) {
+          case 0:
+            _context15.next = 2;
+            return GetProvider();
+
+          case 2:
+            provider = _context15.sent;
+            xdc3 = new _xdc.default(provider);
+            return _context15.abrupt("return", xdc3.eth.currentProvider.disconnect);
+
+          case 5:
+          case "end":
+            return _context15.stop();
+        }
+      }
+    }, _callee15);
+  }));
+  return _Disconnect.apply(this, arguments);
+}
+
+function CheckWalletConnection() {
+  if (!window.ethereum) {
+    (0, _reactToastify.toast)( /*#__PURE__*/(0, _jsxRuntime.jsxs)("div", {
+      children: ["XDCPay not available in the browser. Please refer", " ", /*#__PURE__*/(0, _jsxRuntime.jsx)("a", {
+        href: "https://chrome.google.com/webstore/detail/xdcpay/bocpokimicclpaiekenaeelehdjllofo?hl=en",
+        children: "here"
+      })]
+    }), {
+      autoClose: false
+    });
+  }
+
+  var connectWalletConnector = JSON.parse(localStorage.getItem(_constant.WALLET_CONNECT));
+  var xdcPayConnector = JSON.parse(localStorage.getItem(_constant.XDC_PAY));
+  var CurrentWalletStatus = null;
+
+  if (connectWalletConnector) {
+    CurrentWalletStatus = connectWalletConnector;
+    CurrentWalletStatus.loader = 'wallet-connect';
+  } else if (xdcPayConnector) {
+    CurrentWalletStatus = xdcPayConnector;
+  } else {
+    return false;
+  }
+
+  if (CurrentWalletStatus === null) return false;
+  console.log("CurrentWalletStatus: ", CurrentWalletStatus);
+  return GetProvider().then(function (provider) {
+    console.log("Provider", provider);
+    xdc3 = new _xdc.default(provider);
+    xdc3.eth.getAccounts().then(function (accounts) {
+      console.log("Accounts", accounts);
+
+      if (connectWalletConnector) {
+        xdc3.eth.getChainId().then(function (chain_id) {
+          _store.default.dispatch(actions.WalletConnected({
+            address: CurrentWalletStatus.accounts[0],
+            chain_id: CurrentWalletStatus.chainId,
+            loader: CurrentWalletStatus.loader,
+            explorer: _constant.CHAIN_DATA[chain_id]
+          }));
+        });
+        return true;
+      } else if (CurrentWalletStatus.address === accounts[0]) {
+        _store.default.dispatch(actions.WalletConnected({
+          address: CurrentWalletStatus.address,
+          chain_id: CurrentWalletStatus.chain_id,
+          loader: CurrentWalletStatus.loader,
+          explorer: CurrentWalletStatus.explorer
+        }));
+
+        return true;
+      } else {
+        _store.default.dispatch(actions.WalletDisconnected());
+
+        return false;
+      }
+    }).catch(function () {
+      return false;
+    });
+  }).catch(function () {
+    return false;
+  });
 }
